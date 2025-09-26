@@ -26,7 +26,6 @@ ControlState AIController::GetState() {
         HandleMovement(state);
     }
     
-
     return state;
 }
 
