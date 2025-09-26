@@ -1,0 +1,12 @@
+"filename", "language", "C++", "comment", "blank", "total"
+"/Users/kai/Desktop/Coding/C++Projects/Space/include/AIController.hpp", "C++", -216, -9, -51, -276
+"/Users/kai/Desktop/Coding/C++Projects/Space/include/AITest.hpp", "C++", -50, 0, -18, -68
+"/Users/kai/Desktop/Coding/C++Projects/Space/include/Game.hpp", "C++", 2, 0, 0, 2
+"/Users/kai/Desktop/Coding/C++Projects/Space/include/PlayerController.hpp", "C++", -20, 0, -7, -27
+"/Users/kai/Desktop/Coding/C++Projects/Space/include/spaceship.hpp", "C++", 1, 0, 0, 1
+"/Users/kai/Desktop/Coding/C++Projects/Space/src/AIController.cpp", "C++", 274, 3, 81, 358
+"/Users/kai/Desktop/Coding/C++Projects/Space/src/AITest.cpp", "C++", -216, -1, -65, -282
+"/Users/kai/Desktop/Coding/C++Projects/Space/src/Game.cpp", "C++", 26, 2, 5, 33
+"/Users/kai/Desktop/Coding/C++Projects/Space/src/PlayerController.cpp", "C++", 25, 0, 10, 35
+"/Users/kai/Desktop/Coding/C++Projects/Space/src/spaceship.cpp", "C++", 2, 0, 0, 2
+"Total", "-", -172, -5, -45, -222

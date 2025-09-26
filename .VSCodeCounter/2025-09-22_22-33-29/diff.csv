@@ -1,0 +1,13 @@
+"filename", "language", "C++", "comment", "blank", "total"
+"/Users/kai/Desktop/Coding/C++Projects/Space/include/AIController.hpp", "C++", -7, -2, 0, -9
+"/Users/kai/Desktop/Coding/C++Projects/Space/include/AITest.hpp", "C++", 50, 0, 18, 68
+"/Users/kai/Desktop/Coding/C++Projects/Space/include/PlayerController.hpp", "C++", 13, 0, 5, 18
+"/Users/kai/Desktop/Coding/C++Projects/Space/include/config.h", "C++", 1, 0, 0, 1
+"/Users/kai/Desktop/Coding/C++Projects/Space/include/mathUtils.hpp", "C++", 6, 0, 1, 7
+"/Users/kai/Desktop/Coding/C++Projects/Space/include/spaceship.hpp", "C++", 2, 0, 0, 2
+"/Users/kai/Desktop/Coding/C++Projects/Space/src/AITest.cpp", "C++", 216, 1, 65, 282
+"/Users/kai/Desktop/Coding/C++Projects/Space/src/Game.cpp", "C++", 2, 0, 0, 2
+"/Users/kai/Desktop/Coding/C++Projects/Space/src/mathUtils.cpp", "C++", 14, 0, 5, 19
+"/Users/kai/Desktop/Coding/C++Projects/Space/src/spaceship.cpp", "C++", 16, 0, 2, 18
+"/Users/kai/Desktop/Coding/C++Projects/Space/src/weapons.cpp", "C++", -3, 0, 0, -3
+"Total", "-", 310, -1, 96, 405

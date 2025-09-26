@@ -1,0 +1,40 @@
+# Details
+
+Date : 2025-09-22 22:33:29
+
+Directory /Users/kai/Desktop/Coding/C++Projects/Space
+
+Total : 25 files,  37230 codes, 27 comments, 592 blanks, all 37849 lines
+
+[Summary](results.md) / Details / [Diff Summary](diff.md) / [Diff Details](diff-details.md)
+
+## Files
+| filename | language | code | comment | blank | total |
+| :--- | :--- | ---: | ---: | ---: | ---: |
+| [Makefile](/Makefile) | Makefile | 19 | 7 | 10 | 36 |
+| [graphics/energyLeftFacing.png](/graphics/energyLeftFacing.png) | compressionTargetFile | 45 | 0 | 0 | 45 |
+| [graphics/energyRightFacing.png](/graphics/energyRightFacing.png) | compressionTargetFile | 56 | 0 | 0 | 56 |
+| [graphics/space.png](/graphics/space.png) | compressionTargetFile | 35,800 | 0 | 242 | 36,042 |
+| [graphics/spaceship_red.png](/graphics/spaceship_red.png) | compressionTargetFile | 7 | 0 | 0 | 7 |
+| [graphics/spaceship_yellow.png](/graphics/spaceship_yellow.png) | compressionTargetFile | 4 | 0 | 0 | 4 |
+| [include/AIController.hpp](/include/AIController.hpp) | C++ | 266 | 9 | 69 | 344 |
+| [include/AITest.hpp](/include/AITest.hpp) | C++ | 50 | 0 | 18 | 68 |
+| [include/Button.hpp](/include/Button.hpp) | C++ | 18 | 0 | 5 | 23 |
+| [include/Game.hpp](/include/Game.hpp) | C++ | 47 | 0 | 13 | 60 |
+| [include/IController.hpp](/include/IController.hpp) | C++ | 14 | 0 | 3 | 17 |
+| [include/PlayerController.hpp](/include/PlayerController.hpp) | C++ | 37 | 0 | 13 | 50 |
+| [include/ResourceManager.hpp](/include/ResourceManager.hpp) | C++ | 20 | 2 | 8 | 30 |
+| [include/config.h](/include/config.h) | C++ | 7 | 0 | 2 | 9 |
+| [include/mathUtils.hpp](/include/mathUtils.hpp) | C++ | 6 | 0 | 1 | 7 |
+| [include/spaceship.hpp](/include/spaceship.hpp) | C++ | 56 | 0 | 7 | 63 |
+| [include/weapons.hpp](/include/weapons.hpp) | C++ | 35 | 0 | 10 | 45 |
+| [src/AITest.cpp](/src/AITest.cpp) | C++ | 216 | 1 | 65 | 282 |
+| [src/Button.cpp](/src/Button.cpp) | C++ | 37 | 0 | 10 | 47 |
+| [src/Game.cpp](/src/Game.cpp) | C++ | 163 | 2 | 40 | 205 |
+| [src/ResourceManager.cpp](/src/ResourceManager.cpp) | C++ | 37 | 0 | 12 | 49 |
+| [src/main.cpp](/src/main.cpp) | C++ | 6 | 0 | 1 | 7 |
+| [src/mathUtils.cpp](/src/mathUtils.cpp) | C++ | 14 | 0 | 5 | 19 |
+| [src/spaceship.cpp](/src/spaceship.cpp) | C++ | 222 | 4 | 42 | 268 |
+| [src/weapons.cpp](/src/weapons.cpp) | C++ | 48 | 2 | 16 | 66 |
+
+[Summary](results.md) / Details / [Diff Summary](diff.md) / [Diff Details](diff-details.md)

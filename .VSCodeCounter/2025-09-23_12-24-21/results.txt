@@ -1,0 +1,55 @@
+Date : 2025-09-23 12:24:21
+Directory : /Users/kai/Desktop/Coding/C++Projects/Space
+Total : 25 files,  37058 codes, 22 comments, 547 blanks, all 37627 lines
+
+Languages
++-----------------------+------------+------------+------------+------------+------------+
+| language              | files      | code       | comment    | blank      | total      |
++-----------------------+------------+------------+------------+------------+------------+
+| compressionTargetFile |          5 |     35,912 |          0 |        242 |     36,154 |
+| C++                   |         19 |      1,127 |         15 |        295 |      1,437 |
+| Makefile              |          1 |         19 |          7 |         10 |         36 |
++-----------------------+------------+------------+------------+------------+------------+
+
+Directories
++----------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| path                                                                       | files      | code       | comment    | blank      | total      |
++----------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| .                                                                          |         25 |     37,058 |         22 |        547 |     37,627 |
+| . (Files)                                                                  |          1 |         19 |          7 |         10 |         36 |
+| graphics                                                                   |          5 |     35,912 |          0 |        242 |     36,154 |
+| include                                                                    |         10 |        273 |          2 |         73 |        348 |
+| src                                                                        |          9 |        854 |         13 |        222 |      1,089 |
++----------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+
+Files
++----------------------------------------------------------------------------+-----------------------+------------+------------+------------+------------+
+| filename                                                                   | language              | code       | comment    | blank      | total      |
++----------------------------------------------------------------------------+-----------------------+------------+------------+------------+------------+
+| /Users/kai/Desktop/Coding/C++Projects/Space/Makefile                       | Makefile              |         19 |          7 |         10 |         36 |
+| /Users/kai/Desktop/Coding/C++Projects/Space/graphics/energyLeftFacing.png  | compressionTargetFile |         45 |          0 |          0 |         45 |
+| /Users/kai/Desktop/Coding/C++Projects/Space/graphics/energyRightFacing.png | compressionTargetFile |         56 |          0 |          0 |         56 |
+| /Users/kai/Desktop/Coding/C++Projects/Space/graphics/space.png             | compressionTargetFile |     35,800 |          0 |        242 |     36,042 |
+| /Users/kai/Desktop/Coding/C++Projects/Space/graphics/spaceship_red.png     | compressionTargetFile |          7 |          0 |          0 |          7 |
+| /Users/kai/Desktop/Coding/C++Projects/Space/graphics/spaceship_yellow.png  | compressionTargetFile |          4 |          0 |          0 |          4 |
+| /Users/kai/Desktop/Coding/C++Projects/Space/include/AIController.hpp       | C++                   |         50 |          0 |         18 |         68 |
+| /Users/kai/Desktop/Coding/C++Projects/Space/include/Button.hpp             | C++                   |         18 |          0 |          5 |         23 |
+| /Users/kai/Desktop/Coding/C++Projects/Space/include/Game.hpp               | C++                   |         49 |          0 |         13 |         62 |
+| /Users/kai/Desktop/Coding/C++Projects/Space/include/IController.hpp        | C++                   |         14 |          0 |          3 |         17 |
+| /Users/kai/Desktop/Coding/C++Projects/Space/include/PlayerController.hpp   | C++                   |         17 |          0 |          6 |         23 |
+| /Users/kai/Desktop/Coding/C++Projects/Space/include/ResourceManager.hpp    | C++                   |         20 |          2 |          8 |         30 |
+| /Users/kai/Desktop/Coding/C++Projects/Space/include/config.h               | C++                   |          7 |          0 |          2 |          9 |
+| /Users/kai/Desktop/Coding/C++Projects/Space/include/mathUtils.hpp          | C++                   |          6 |          0 |          1 |          7 |
+| /Users/kai/Desktop/Coding/C++Projects/Space/include/spaceship.hpp          | C++                   |         57 |          0 |          7 |         64 |
+| /Users/kai/Desktop/Coding/C++Projects/Space/include/weapons.hpp            | C++                   |         35 |          0 |         10 |         45 |
+| /Users/kai/Desktop/Coding/C++Projects/Space/src/AIController.cpp           | C++                   |        274 |          3 |         81 |        358 |
+| /Users/kai/Desktop/Coding/C++Projects/Space/src/Button.cpp                 | C++                   |         37 |          0 |         10 |         47 |
+| /Users/kai/Desktop/Coding/C++Projects/Space/src/Game.cpp                   | C++                   |        189 |          4 |         45 |        238 |
+| /Users/kai/Desktop/Coding/C++Projects/Space/src/PlayerController.cpp       | C++                   |         25 |          0 |         10 |         35 |
+| /Users/kai/Desktop/Coding/C++Projects/Space/src/ResourceManager.cpp        | C++                   |         37 |          0 |         12 |         49 |
+| /Users/kai/Desktop/Coding/C++Projects/Space/src/main.cpp                   | C++                   |          6 |          0 |          1 |          7 |
+| /Users/kai/Desktop/Coding/C++Projects/Space/src/mathUtils.cpp              | C++                   |         14 |          0 |          5 |         19 |
+| /Users/kai/Desktop/Coding/C++Projects/Space/src/spaceship.cpp              | C++                   |        224 |          4 |         42 |        270 |
+| /Users/kai/Desktop/Coding/C++Projects/Space/src/weapons.cpp                | C++                   |         48 |          2 |         16 |         66 |
+| Total                                                                      |                       |     37,058 |         22 |        547 |     37,627 |
++----------------------------------------------------------------------------+-----------------------+------------+------------+------------+------------+
