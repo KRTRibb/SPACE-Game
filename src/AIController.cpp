@@ -19,11 +19,21 @@ ControlState AIController::GetState() {
 
     DecideMode();
     UpdateCooldowns();
-
+    UpdateEnemySeparation();
+    
     HandleShooting(state);
+    HandleMovement(state);
+    Vector2 modeMove = {state.moveX, state.moveY};
 
-    if (!TryDodge(state)) {
-        HandleMovement(state);
+     if (isDodging) {
+        UpdateDodgeDir();
+        Vector2 dodgeMove = dodgeDir;
+        Vector2 blended = BlendMovement(modeMove, dodgeMove);
+        state.moveX = blended.x;
+        state.moveY = blended.y;
+        UpdateThreatType();
+    } else {
+        TryDodge(state);
     }
     
     return state;
@@ -78,15 +88,14 @@ void AIController::HandleShooting(ControlState& state) {
 }
 
 void AIController::HandleMovement(ControlState& state) {
-    float xDiff = GetXDistanceToPlayer();
     switch (mode) {
         case AIMode::Offensive:
-            HandleVerticalMovement(state);;
-            state.moveX = (xDiff > 0 ? 1.0f : -1.0f);
+            HandleVerticalMovement(state);
+            HandleHorizontalMovement(state);
             break;
         case AIMode::Defensive:
             HandleVerticalMovement(state);
-            state.moveX = (xDiff > 0 ? -1.0f : 1.0f);
+            HandleHorizontalMovement(state);
             break;
         case AIMode::Nuetral:
             HandleHorizontalMovement(state);
@@ -121,9 +130,11 @@ void AIController::HandleVerticalMovement(ControlState& state) {
 }
 
 void AIController::HandleHorizontalMovement(ControlState& state) {
+    float buffer = GetRandomValue(50, 90);
+    float minDistance = separationFromEnemy - buffer;
+    float maxDistance = separationFromEnemy + buffer;
+
     float xDiff = GetXDistanceToPlayer();
-    float minDistance = separationFromEnemy - 75.0f;
-    float maxDistance = separationFromEnemy + 75.0f;
 
     if (std::fabs(xDiff) < minDistance) {
         state.moveX = (self->shipSide == Side::RIGHT) ? 1.0f : -1.0f;
@@ -136,11 +147,51 @@ void AIController::HandleHorizontalMovement(ControlState& state) {
     }
 }
 
+
+Vector2 AIController::BlendMovement(const Vector2& modeMove, const Vector2& dodgeMove) {
+    float dodgeWeight;
+
+    switch (mode) {
+        case AIMode::Defensive:
+            dodgeWeight = 1.0f;
+            break;
+        case AIMode::Nuetral:
+            dodgeWeight = 0.75f;
+            break;
+        case AIMode::Offensive:
+            dodgeWeight = 0.5f;
+            break;
+    }
+
+    float modeWeight = 1.0f - dodgeWeight;
+
+    Vector2 blended = {
+        modeMove.x * modeWeight + dodgeMove.x * dodgeWeight,
+        modeMove.y * modeWeight + dodgeMove.y * dodgeWeight
+    };
+
+    return math::NormalizeVec(blended);
+}
+
 void AIController::UpdateCooldowns() {
     float dt = GetFrameTime();
     shootCooldown -= dt;
     energyCooldown -= dt;
     dodgeCooldown -= dt;
+}
+
+void AIController::UpdateEnemySeparation() {
+    switch (mode) {
+        case AIMode::Offensive:
+            separationFromEnemy = 600.0f;
+            break;
+        case AIMode::Defensive:
+            separationFromEnemy = 800.0f;
+            break;
+        case AIMode::Nuetral:
+            separationFromEnemy = 400.0;
+            break;
+    }
 }
 
 float AIController::GetXDistanceToPlayer() {
@@ -244,13 +295,13 @@ bool AIController::ComputeDodgeForEnergy(Vector2& outDir) {
     Vector2 bestDir = {0.0f, 0.0f};
 
     for (auto &ew : enemy->energyWeapons) {
-        if(!ew.active) continue;
+        if(!ew.active || !ew.isHoming) continue;
 
         float timeAlive = GetTime() - ew.timeEmmited;
-        // reaction time delay
+        // Reaction time delay
         if (timeAlive <= 0.2f) continue;
 
-        // Random change not to dodge
+        // 30% chance not to dodge on a frame
         if (GetRandomValue(0, 100) > 70) continue;
 
         Vector2 toSelf = {selfCenter.x - ew.pos.x, selfCenter.y - ew.pos.y};
@@ -317,6 +368,18 @@ bool AIController::ComputeDodgeForBullet(Vector2& outDir) {
     }
 
     return false;
+}
+
+void AIController::UpdateDodgeDir() {
+    Vector2 newDir = dodgeDir;
+    if (currentThreat == ThreatType::Energy) {
+        Vector2 tmp;
+        if (ComputeDodgeForEnergy(tmp)) newDir = tmp;
+    }   else if (currentThreat == ThreatType::Bullet) {
+        Vector2 tmp;
+        if (ComputeDodgeForBullet(tmp)) newDir = tmp;
+    }
+    dodgeDir = math::NormalizeVec(newDir);
 }
 
 bool AIController::TryDodge(ControlState& state) {

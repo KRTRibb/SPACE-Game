@@ -17,7 +17,8 @@ struct Bullet {
 struct EnergyWeapon {
     Vector2 pos; // Position of center of circle hitbox
     float radius; // Radius of circle hitbox
-    bool active;
+    bool active = true; // false when not homing AND off screen
+    bool isHoming = true; // false when no longer hominh
     float spriteRotation = 0; // Clockwise rotation
     Vector2 dir;
     float vel;
@@ -40,6 +41,8 @@ struct EnergyWeapon {
     void Move();
 
     void Update();
+
+    void UpdateStatus();
 };
 
 #endif

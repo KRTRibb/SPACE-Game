@@ -1,10 +1,10 @@
 # Summary
 
-Date : 2025-09-20 15:47:07
+Date : 2025-09-26 21:55:45
 
 Directory /Users/kai/Desktop/Coding/C++Projects/Space
 
-Total : 21 files,  36920 codes, 28 comments, 496 blanks, all 37444 lines
+Total : 25 files,  37072 codes, 23 comments, 538 blanks, all 37633 lines
 
 Summary / [Details](details.md) / [Diff Summary](diff.md) / [Diff Details](diff-details.md)
 
@@ -12,16 +12,16 @@ Summary / [Details](details.md) / [Diff Summary](diff.md) / [Diff Details](diff-
 | language | files | code | comment | blank | total |
 | :--- | ---: | ---: | ---: | ---: | ---: |
 | compressionTargetFile | 5 | 35,912 | 0 | 242 | 36,154 |
-| C++ | 15 | 989 | 21 | 244 | 1,254 |
+| C++ | 19 | 1,141 | 16 | 286 | 1,443 |
 | Makefile | 1 | 19 | 7 | 10 | 36 |
 
 ## Directories
 | path | files | code | comment | blank | total |
 | :--- | ---: | ---: | ---: | ---: | ---: |
-| . | 21 | 36,920 | 28 | 496 | 37,444 |
+| . | 25 | 37,072 | 23 | 538 | 37,633 |
 | . (Files) | 1 | 19 | 7 | 10 | 36 |
 | graphics | 5 | 35,912 | 0 | 242 | 36,154 |
-| include | 9 | 491 | 13 | 125 | 629 |
-| src | 6 | 498 | 8 | 119 | 625 |
+| include | 10 | 273 | 2 | 73 | 348 |
+| src | 9 | 868 | 14 | 213 | 1,095 |
 
 Summary / [Details](details.md) / [Diff Summary](diff.md) / [Diff Details](diff-details.md)

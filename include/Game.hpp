@@ -6,6 +6,7 @@
 #include "spaceship.hpp"
 #include "Button.hpp"
 #include <string>
+#include "UIManager.hpp"
 
 
 enum class GameState {
@@ -41,14 +42,25 @@ private:
     GameState state;
     Winner winner;
 
+    UIManager uiManager;
+    std::unique_ptr<Button> restartButton;
+    Button* restartButtonPtr = nullptr;
+    std::unique_ptr<Button> backToMenuButton;
+    Button* backToMenuButtonPtr = nullptr;
+    std::unique_ptr<Button> singlePlayerButton;
+    Button* singlePlayerButtonPtr = nullptr;
+    std::unique_ptr<Button> twoPlayerButton;
+    Button* twoPlayerButtonPtr = nullptr;
+    std::unique_ptr<Button> noPlayerButton;
+    Button* noPlayerButtonPtr = nullptr;
+
     ResourceManager resources;
     std::unique_ptr<Spaceship> redShip;
     std::unique_ptr<Spaceship> yellowShip;
-    std::unique_ptr<Button> restartButton;
-    std::unique_ptr<Button> backToMenuButton;
-    std::unique_ptr<Button> singlePlayerButton;
-    std::unique_ptr<Button> twoPlayerButton;
-    std::unique_ptr<Button> noPlayerButton;
+
+    void SetUpUI();
+    void SetMenuUIVisible();
+    void SetGameOverUIVisible();
 
     void DrawWindow();
     void DrawGameOver();

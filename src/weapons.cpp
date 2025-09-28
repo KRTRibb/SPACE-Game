@@ -50,15 +50,26 @@ void EnergyWeapon::Move() {
 
     pos.x += dir.x * vel * dt;
     pos.y += dir.y * vel * dt;
+}
 
-    if (pos.x < 0 || pos.x > WIDTH || pos.y < 0 || pos.y > HEIGHT)
+// Helper Function to update active and is homing status
+void EnergyWeapon::UpdateStatus() {
+    if (GetTime() - timeEmmited > homingDuration) {
+        isHoming = false;
+    }
+    bool inBounds = pos.x < 0 || pos.x > WIDTH || pos.y < 0 || pos.y > HEIGHT;
+    if (inBounds && !isHoming) {
         active = false;
+    }
+
 }
 
 void EnergyWeapon::Update() {
     if (!active) return;
 
-    if (GetTime() - timeEmmited <= homingDuration){ // Homing only lasts for 5 seconds
+    UpdateStatus();
+
+    if (isHoming){ // Homing only lasts for 5 seconds
         UpdateDirection();
         UpdateSpriteRotation();
     }

@@ -39,8 +39,10 @@ private:
 
     void HandleVerticalMovement(ControlState& state);
     void HandleHorizontalMovement(ControlState& state);
+    Vector2 BlendMovement(const Vector2& modeMove, const Vector2& dodgeMove);
 
     void UpdateCooldowns();
+    void UpdateEnemySeparation();
 
     float GetXDistanceToPlayer();
     float GetYDistanceToPlayer();
@@ -55,8 +57,10 @@ private:
 
     bool ComputeDodgeForEnergy(Vector2& outDir);
     bool ComputeDodgeForBullet(Vector2& outDir);
+    void UpdateDodgeDir();
 
     bool TryDodge(ControlState& state);
+
 
 public:
     AIController(Spaceship* selfShip, Spaceship* enemyShip);

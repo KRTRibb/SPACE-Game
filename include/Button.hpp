@@ -2,22 +2,26 @@
 #define BUTTON_HPP
 
 #include "raylib.h" 
+#include "UIElement.hpp"
+#include <string>
 
-class Button {
+class Button: public UIElement {
     public:
-        Button(const char* text, int centerX, int y, int fontSize, Color c, Color hc, Color pc);
+        Button(std::string text, int centerX, int y, int fontSize, Color c, Color hc, Color pc);
 
-        void Render() const;
-        bool Update(); // returns true if clicked
+        void Update(float dt) override;
+        void Render() override;
+        bool WasClicked() const;
 
     private:
         Rectangle bounds;
-        const char* text;  
+        std::string text;  
         Color color;
         Color hoverColor;
         Color pressedColor;
         Color currentColor;
         int fontSize;
+        bool clicked = false;
 };
 
 #endif

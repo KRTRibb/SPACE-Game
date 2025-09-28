@@ -15,11 +15,9 @@ Game::Game() {
 
     state = GameState::Menu;
     winner = Winner::None;
-    restartButton = std::make_unique<Button> ("Restart Game", WIDTH / 2 - 100, HEIGHT / 2 + 25, 25, GRAY, DARKGRAY, BLACK);
-    backToMenuButton = std::make_unique<Button> ("Back To Menu", WIDTH / 2 + 100, HEIGHT / 2 + 25, 25, GRAY, DARKGRAY, BLACK);
-    singlePlayerButton = std::make_unique<Button> ("Single Player", WIDTH / 2 - 100, HEIGHT / 2, 25, GRAY, DARKGRAY, BLACK);
-    twoPlayerButton = std::make_unique<Button> ("Two Player", WIDTH / 2 + 100, HEIGHT / 2, 25, GRAY, DARKGRAY, BLACK);
-    noPlayerButton = std::make_unique<Button> ("AI vs AI", WIDTH / 2, HEIGHT / 2 + 75, 25, GRAY, DARKGRAY, BLACK);
+
+    SetUpUI();
+    SetMenuUIVisible();
 
     resources.loadTexture("redShip", "graphics/spaceship_red.png");
     resources.loadTexture("yellowShip", "graphics/spaceship_yellow.png");
@@ -46,19 +44,21 @@ void Game::Run() {
 
 void Game::Update() {
     float dt = GetFrameTime();
+    uiManager.Update(dt);
+
     switch (state) {
         case GameState::Menu:
-            if (singlePlayerButton->Update()) {
+            if (singlePlayerButton && singlePlayerButton->WasClicked()) {
                 StartSinglePlayer();
                 state = GameState::Playing;
             }
 
-            if (twoPlayerButton->Update()) {
+            if (twoPlayerButton && twoPlayerButton->WasClicked()) {
                 StartTwoPlayer();
                 state = GameState::Playing;
             }
 
-            if (noPlayerButton->Update()) {
+            if (noPlayerButton && noPlayerButton->WasClicked()) {
                 StartNoPlayer();
                 state = GameState::Playing;
             }
@@ -71,21 +71,24 @@ void Game::Update() {
             if (redShip->IsDead()) {
                 winner = Winner::Yellow;
                 state = GameState::GameOver;
+                SetGameOverUIVisible();
             }
 
             if (yellowShip->IsDead()) {
                 winner = Winner::Red;
                 state = GameState::GameOver;
+                SetGameOverUIVisible();
             }
             break;
 
         case GameState::GameOver:
-            if (restartButton->Update()) {
+            if (restartButton && restartButton->WasClicked()) {
                 Reset();
             }
 
-            if (backToMenuButton->Update()) {
+            if (backToMenuButton && backToMenuButton->WasClicked()) {
                 state = GameState::Menu;
+                SetMenuUIVisible();
             }    
 
             break;
@@ -99,16 +102,19 @@ void Game::Render() {
     switch (state) {
         case GameState::Menu:
             DrawMenu();
+        uiManager.Render();
             break;
 
         case GameState::Playing:
             DrawWindow();
             redShip->Draw();
             yellowShip->Draw();
+            uiManager.Render();
             break;
 
         case GameState::GameOver:
             DrawGameOver();
+            uiManager.Render();
             break;
     }
     EndDrawing();
@@ -119,6 +125,43 @@ void Game::Reset() {
     yellowShip->Reset();
     state = GameState::Playing;
     winner = Winner::None;
+}
+
+void Game::SetUpUI() {
+    restartButton = std::make_unique<Button> ("Restart Game", WIDTH / 2 - 100, HEIGHT / 2 + 25, 25, GRAY, DARKGRAY, BLACK);
+    restartButtonPtr = restartButton.get();
+    backToMenuButton = std::make_unique<Button> ("Back To Menu", WIDTH / 2 + 100, HEIGHT / 2 + 25, 25, GRAY, DARKGRAY, BLACK);
+    backToMenuButtonPtr = backToMenuButton.get();
+    singlePlayerButton = std::make_unique<Button> ("Single Player", WIDTH / 2 - 100, HEIGHT / 2, 25, GRAY, DARKGRAY, BLACK);\
+    singlePlayerButtonPtr = singlePlayerButton.get();
+    twoPlayerButton = std::make_unique<Button> ("Two Player", WIDTH / 2 + 100, HEIGHT / 2, 25, GRAY, DARKGRAY, BLACK);
+    twoPlayerButtonPtr = twoPlayerButton.get();
+    noPlayerButton = std::make_unique<Button> ("AI vs AI", WIDTH / 2, HEIGHT / 2 + 75, 25, GRAY, DARKGRAY, BLACK);
+    noPlayerButtonPtr = noPlayerButton.get();
+
+    uiManager.AddElement(std::move(restartButton));
+    uiManager.AddElement(std::move(backToMenuButton));
+    uiManager.AddElement(std::move(singlePlayerButton));
+    uiManager.AddElement(std::move(twoPlayerButton));
+    uiManager.AddElement(std::move(noPlayerButton));
+}
+
+void Game::SetMenuUIVisible() {
+    singlePlayerButtonPtr->isVisible = true;
+    twoPlayerButtonPtr->isVisible = true;
+    noPlayerButtonPtr->isVisible = true;
+
+    restartButtonPtr->isVisible = false;
+    backToMenuButtonPtr->isVisible = false;
+}
+
+void Game::SetGameOverUIVisible() {
+    restartButtonPtr->isVisible = true;
+    backToMenuButtonPtr->isVisible = true;
+
+    singlePlayerButtonPtr->isVisible = false;
+    twoPlayerButtonPtr->isVisible = false;
+    noPlayerButtonPtr->isVisible = false;
 }
 
 void Game::DrawWindow() {
@@ -143,17 +186,10 @@ void Game::DrawGameOver() {
 
     DrawText(TextFormat("%d", yellowShip->score), WIDTH / 2 - textWidth / 2 - 70, HEIGHT / 2 + yellowShip->shipRect.height, 30, WHITE);
     DrawText(TextFormat("%d", redShip->score), WIDTH / 2 + textWidth / 2 + 70, HEIGHT / 2 + yellowShip->shipRect.height, 30, WHITE);
-
-    restartButton->Render();
-    backToMenuButton->Render();
 }
 
 void Game::DrawMenu() {
     DrawTexture(resources.GetTexture("background"), 0, 0, WHITE);
-
-    singlePlayerButton->Render();
-    twoPlayerButton->Render();
-    noPlayerButton->Render();
 }
 
 void Game::StartSinglePlayer() {

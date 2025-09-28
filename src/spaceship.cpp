@@ -11,7 +11,7 @@ const float initialHelth = 10.0f;
 const int initialBulletLim = 5;
 const int initialMaxEnergyShots = 1;
 const int initialShipVel = 500; // pixels per second
-const int initialBullVel = 550; // pixels per second
+const int initialBullVel = 530; // pixels per second
 const Vector2 bulletSize = {15, 5}; // width, height.
 
 Spaceship::Spaceship(const Texture2D& ship, Side side, Sound& shoot, Sound& hit, Texture2D& energyImage, Sound& energyShootingSound, std::unique_ptr<IController> ctrl)
@@ -126,7 +126,7 @@ void Spaceship::Draw() {
 }
 
 void Spaceship::ShootBullet() {
-    if ((int)bullets.size() <= bulletLim) {
+    if ((int)bullets.size() < bulletLim) {
         Bullet b;
         float bulletX = shipSide == Side::LEFT ? shipRect.x + shipRect.width : shipRect.x;
         b.pos = {bulletX, shipRect.y + shipRect.height / 2};

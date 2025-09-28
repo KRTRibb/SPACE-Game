@@ -1,13 +1,11 @@
 #include "Button.hpp"
 #include "raylib.h"
 
-#include "Button.hpp"
-
-Button::Button(const char* txt, int centerX, int y, int fSize,
+Button::Button(std::string txt, int centerX, int y, int fSize,
                Color c, Color hc, Color pc)
     : text(txt), color(c), hoverColor(hc), pressedColor(pc), currentColor(c), fontSize(fSize)
 {
-    int textWidth = MeasureText(text, fontSize);
+    int textWidth = MeasureText(text.c_str(), fontSize);
     int textHeight = fontSize;
     float padding = 10.0f;
 
@@ -19,19 +17,9 @@ Button::Button(const char* txt, int centerX, int y, int fSize,
     };
 }
 
-void Button::Render() const {
-    int textWidth = MeasureText(text, fontSize);
-    int textHeight = fontSize;
-    float textX = bounds.x + (bounds.width - textWidth) / 2;
-    float textY = bounds.y + (bounds.height - textHeight) / 2;
-
-    DrawRectangleRec(bounds, currentColor);
-    DrawText(text, (int)textX, (int)textY, fontSize, WHITE);
-}
-
-bool Button::Update() {
+void Button::Update(float dt) {
     Vector2 mousePoint = GetMousePosition();
-    bool clicked = false;
+    clicked = false;
 
     if (CheckCollisionPointRec(mousePoint, bounds)) {
         if (IsMouseButtonDown(MOUSE_LEFT_BUTTON)) currentColor = pressedColor;
@@ -41,6 +29,18 @@ bool Button::Update() {
     } else {
         currentColor = color;
     }
+}
 
+void Button::Render() {
+    int textWidth = MeasureText(text.c_str(), fontSize);
+    int textHeight = fontSize;
+    float textX = bounds.x + (bounds.width - textWidth) / 2;
+    float textY = bounds.y + (bounds.height - textHeight) / 2;
+
+    DrawRectangleRec(bounds, currentColor);
+    DrawText(text.c_str(), (int)textX, (int)textY, fontSize, WHITE);
+}
+
+bool Button::WasClicked() const {
     return clicked;
 }
