@@ -4,6 +4,8 @@
 # Ignore build output binary
 main
 
+build
+
 # Ignore VSCodeCounter analysis folder
 .VSCodeCounter/
 

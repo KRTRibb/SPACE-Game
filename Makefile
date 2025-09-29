@@ -8,11 +8,15 @@ RAYLIB_LDFLAGS := $(shell pkg-config --libs raylib)
 
 # Project files
 SRC = $(shell find src -name '*.cpp')
-OBJ = $(SRC:.cpp=.o)
+
+# Object output directory
+OBJDIR = build
+OBJ = $(patsubst src/%.cpp,$(OBJDIR)/%.o,$(SRC))
+
 BIN = main
 
-# Include directory
-INCLUDES = -Iinclude
+# Include directories
+INCLUDES = -Iinclude -Iinclude/core -Iinclude/controllers -Iinclude/ui
 
 # Build rule
 all: $(BIN)
@@ -20,7 +24,9 @@ all: $(BIN)
 $(BIN): $(OBJ)
 	$(CXX) $(CXXFLAGS) $(OBJ) -o $(BIN) $(RAYLIB_LDFLAGS)
 
-%.o: %.cpp
+# Pattern rule: compile into $(OBJDIR)
+$(OBJDIR)/%.o: src/%.cpp
+	@mkdir -p $(dir $@)
 	$(CXX) $(CXXFLAGS) $(INCLUDES) $(RAYLIB_CFLAGS) -c $< -o $@
 
 # Run
@@ -29,7 +35,7 @@ run: $(BIN)
 
 # Clean
 clean:
-	rm -f $(OBJ) $(BIN)
+	rm -rf $(OBJDIR) $(BIN)
+
 count:
 	find . -name '*.cpp' -o -name '*.hpp' | xargs wc -l
-
