@@ -221,7 +221,7 @@ void Game::SetUpUI() {
     std::unique_ptr<StaticText> redShipHealthText = std::make_unique<StaticText>(TextFormat("Health: %.1f", 100.0f), WIDTH - 80, 25, WHITE, 25);
     std::unique_ptr<StaticText> yellowShipScoreText = std::make_unique<StaticText>(TextFormat("%d", 0), WIDTH / 2 - 250, HEIGHT / 2 + 40, WHITE, 30);
     std::unique_ptr<StaticText> redShipScoreText = std::make_unique<StaticText>(TextFormat("%d", 0), WIDTH / 2 + 250, HEIGHT / 2 + 40, WHITE, 30);
-    std::unique_ptr<FloatingText> winnerText = std::make_unique<FloatingText>("", WIDTH / 2, HEIGHT / 2 - 45, WHITE, 50, 40);
+    std::unique_ptr<FloatingText> winnerText = std::make_unique<FloatingText>("", WIDTH / 2, HEIGHT / 2 - 45, WHITE, 50, 20);
 
     uiManager.AddElement(UIElementID::RestartButton, std::move(restartButton));
     uiManager.AddElement(UIElementID::BackToMenuButton, std::move(backToMenuButton));
