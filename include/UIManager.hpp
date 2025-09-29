@@ -4,14 +4,16 @@
 #include "raylib.h"
 #include "UIElement.hpp"
 #include <unordered_map>
-#include <vector>
+#include <memory>
 
 class UIManager {
     public:
-        void AddElement(UIType& type, std::unique_ptr<UIElement> element);
+        void AddElement(UIElementID uiType, std::unique_ptr<UIElement> element);
         void Update(float dt);
         void Render();
-        std::unordered_map<UIType, UIElement>;
+        UIElement* GetElement(UIElementID id);
+    private:
+        std::unordered_map<UIElementID, std::unique_ptr<UIElement>> elements;
 };
 
 #endif

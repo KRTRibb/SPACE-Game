@@ -43,24 +43,18 @@ private:
     Winner winner;
 
     UIManager uiManager;
-    std::unique_ptr<Button> restartButton;
-    Button* restartButtonPtr = nullptr;
-    std::unique_ptr<Button> backToMenuButton;
-    Button* backToMenuButtonPtr = nullptr;
-    std::unique_ptr<Button> singlePlayerButton;
-    Button* singlePlayerButtonPtr = nullptr;
-    std::unique_ptr<Button> twoPlayerButton;
-    Button* twoPlayerButtonPtr = nullptr;
-    std::unique_ptr<Button> noPlayerButton;
-    Button* noPlayerButtonPtr = nullptr;
 
     ResourceManager resources;
     std::unique_ptr<Spaceship> redShip;
     std::unique_ptr<Spaceship> yellowShip;
 
+    std::vector<UIElementID> menuUIElements;
+    std::vector<UIElementID> gameOverUIElements;
+
     void SetUpUI();
     void SetMenuUIVisible();
     void SetGameOverUIVisible();
+    void SetPlayingUIVisible();
 
     void DrawWindow();
     void DrawGameOver();

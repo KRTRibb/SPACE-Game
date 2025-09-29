@@ -1,15 +1,17 @@
 #ifndef UIELEMENT_HPP
 #define UIELEMENT_HPP
 
-enum class UITypes {
-    Button,
-    StaticText,
-    MovingText
+enum class UIElementID {
+    RestartButton,
+    BackToMenuButton,
+    SinglePlayerButton,
+    TwoPlayerButton,
+    NoPlayerButton
 };
 
 class UIElement {
 public:
-    bool isVisible = true;
+    bool isVisible = false;
     virtual void Update(float dt) = 0;
     virtual void Render() = 0;
     virtual ~UIElement() = default;

@@ -16,7 +16,19 @@ Game::Game() {
     state = GameState::Menu;
     winner = Winner::None;
 
+    menuUIElements = {
+        UIElementID::SinglePlayerButton,
+        UIElementID::TwoPlayerButton,
+        UIElementID::NoPlayerButton
+    };
+
+    gameOverUIElements = {
+        UIElementID::BackToMenuButton,
+        UIElementID::RestartButton
+    };
+
     SetUpUI();
+
     SetMenuUIVisible();
 
     resources.loadTexture("redShip", "graphics/spaceship_red.png");
@@ -47,24 +59,30 @@ void Game::Update() {
     uiManager.Update(dt);
 
     switch (state) {
-        case GameState::Menu:
-            if (singlePlayerButton && singlePlayerButton->WasClicked()) {
+        case GameState::Menu: {
+            auto singleBtn = dynamic_cast<Button*>(uiManager.GetElement(UIElementID::SinglePlayerButton));
+            if (singleBtn && singleBtn->WasClicked()) {
                 StartSinglePlayer();
                 state = GameState::Playing;
+                SetPlayingUIVisible();
             }
 
-            if (twoPlayerButton && twoPlayerButton->WasClicked()) {
+            auto twoBtn = dynamic_cast<Button*>(uiManager.GetElement(UIElementID::TwoPlayerButton));
+            if (twoBtn && twoBtn->WasClicked()) {
                 StartTwoPlayer();
                 state = GameState::Playing;
+                SetPlayingUIVisible();
             }
 
-            if (noPlayerButton && noPlayerButton->WasClicked()) {
+            auto noBtn = dynamic_cast<Button*>(uiManager.GetElement(UIElementID::NoPlayerButton));
+            if (noBtn && noBtn->WasClicked()) {
                 StartNoPlayer();
                 state = GameState::Playing;
+                SetPlayingUIVisible();
             }
             break;
-
-        case GameState::Playing:
+        }
+        case GameState::Playing: {
             redShip->Update(dt, *yellowShip);
             yellowShip->Update(dt, *redShip);
 
@@ -79,19 +97,23 @@ void Game::Update() {
                 state = GameState::GameOver;
                 SetGameOverUIVisible();
             }
+
             break;
+        }
 
-        case GameState::GameOver:
-            if (restartButton && restartButton->WasClicked()) {
+        case GameState::GameOver: {
+            auto restartBtn = dynamic_cast<Button*>(uiManager.GetElement(UIElementID::RestartButton));
+            if (restartBtn && restartBtn->WasClicked()) {
                 Reset();
+                SetPlayingUIVisible();
             }
-
-            if (backToMenuButton && backToMenuButton->WasClicked()) {
+            auto menuBtn = dynamic_cast<Button*>(uiManager.GetElement(UIElementID::BackToMenuButton));
+            if (menuBtn && menuBtn->WasClicked()) {
                 state = GameState::Menu;
                 SetMenuUIVisible();
             }    
-
             break;
+        }
     }
 }
 
@@ -102,7 +124,7 @@ void Game::Render() {
     switch (state) {
         case GameState::Menu:
             DrawMenu();
-        uiManager.Render();
+            uiManager.Render();
             break;
 
         case GameState::Playing:
@@ -120,6 +142,43 @@ void Game::Render() {
     EndDrawing();
 }
 
+void Game::SetMenuUIVisible() {
+    for (const auto& id : menuUIElements) {
+        UIElement* element = uiManager.GetElement(id);
+        element->isVisible = true;
+    }
+
+    for (const auto& id : gameOverUIElements) {
+        UIElement* element = uiManager.GetElement(id);
+        element->isVisible = false;
+    }
+}
+
+void Game::SetPlayingUIVisible() {
+    for (const auto& id : menuUIElements) {
+        UIElement* element = uiManager.GetElement(id);
+        element->isVisible = false;
+    }
+
+    for (const auto& id : gameOverUIElements) {
+        UIElement* element = uiManager.GetElement(id);
+        element->isVisible = false;
+    }
+}
+
+void Game::SetGameOverUIVisible() {
+    for (const auto& id : gameOverUIElements) {
+        UIElement* element = uiManager.GetElement(id);
+        element->isVisible = true;
+    }
+    
+    for (const auto& id : menuUIElements) {
+        UIElement* element = uiManager.GetElement(id);
+        element->isVisible = false;
+    }
+}
+
+
 void Game::Reset() {
     redShip->Reset();
     yellowShip->Reset();
@@ -128,40 +187,17 @@ void Game::Reset() {
 }
 
 void Game::SetUpUI() {
-    restartButton = std::make_unique<Button> ("Restart Game", WIDTH / 2 - 100, HEIGHT / 2 + 25, 25, GRAY, DARKGRAY, BLACK);
-    restartButtonPtr = restartButton.get();
-    backToMenuButton = std::make_unique<Button> ("Back To Menu", WIDTH / 2 + 100, HEIGHT / 2 + 25, 25, GRAY, DARKGRAY, BLACK);
-    backToMenuButtonPtr = backToMenuButton.get();
-    singlePlayerButton = std::make_unique<Button> ("Single Player", WIDTH / 2 - 100, HEIGHT / 2, 25, GRAY, DARKGRAY, BLACK);\
-    singlePlayerButtonPtr = singlePlayerButton.get();
-    twoPlayerButton = std::make_unique<Button> ("Two Player", WIDTH / 2 + 100, HEIGHT / 2, 25, GRAY, DARKGRAY, BLACK);
-    twoPlayerButtonPtr = twoPlayerButton.get();
-    noPlayerButton = std::make_unique<Button> ("AI vs AI", WIDTH / 2, HEIGHT / 2 + 75, 25, GRAY, DARKGRAY, BLACK);
-    noPlayerButtonPtr = noPlayerButton.get();
+    std::unique_ptr<Button> restartButton = std::make_unique<Button> ("Restart Game", WIDTH / 2 - 100, HEIGHT / 2 + 25, 25, GRAY, DARKGRAY, BLACK);
+    std::unique_ptr<Button> backToMenuButton = std::make_unique<Button> ("Back To Menu", WIDTH / 2 + 100, HEIGHT / 2 + 25, 25, GRAY, DARKGRAY, BLACK);
+    std::unique_ptr<Button> singlePlayerButton = std::make_unique<Button> ("Single Player", WIDTH / 2 - 100, HEIGHT / 2, 25, GRAY, DARKGRAY, BLACK);\
+    std::unique_ptr<Button> twoPlayerButton = std::make_unique<Button> ("Two Player", WIDTH / 2 + 100, HEIGHT / 2, 25, GRAY, DARKGRAY, BLACK);
+    std::unique_ptr<Button> noPlayerButton = std::make_unique<Button> ("AI vs AI", WIDTH / 2, HEIGHT / 2 + 75, 25, GRAY, DARKGRAY, BLACK);
 
-    uiManager.AddElement(std::move(restartButton));
-    uiManager.AddElement(std::move(backToMenuButton));
-    uiManager.AddElement(std::move(singlePlayerButton));
-    uiManager.AddElement(std::move(twoPlayerButton));
-    uiManager.AddElement(std::move(noPlayerButton));
-}
-
-void Game::SetMenuUIVisible() {
-    singlePlayerButtonPtr->isVisible = true;
-    twoPlayerButtonPtr->isVisible = true;
-    noPlayerButtonPtr->isVisible = true;
-
-    restartButtonPtr->isVisible = false;
-    backToMenuButtonPtr->isVisible = false;
-}
-
-void Game::SetGameOverUIVisible() {
-    restartButtonPtr->isVisible = true;
-    backToMenuButtonPtr->isVisible = true;
-
-    singlePlayerButtonPtr->isVisible = false;
-    twoPlayerButtonPtr->isVisible = false;
-    noPlayerButtonPtr->isVisible = false;
+    uiManager.AddElement(UIElementID::RestartButton, std::move(restartButton));
+    uiManager.AddElement(UIElementID::BackToMenuButton, std::move(backToMenuButton));
+    uiManager.AddElement(UIElementID::SinglePlayerButton, std::move(singlePlayerButton));
+    uiManager.AddElement(UIElementID::TwoPlayerButton, std::move(twoPlayerButton));
+    uiManager.AddElement(UIElementID::NoPlayerButton, std::move(noPlayerButton));
 }
 
 void Game::DrawWindow() {
