@@ -12,6 +12,13 @@ void UIManager::Update(float dt) {
     }
 }
 
+void UIManager::SetVisibility(const std::vector<UIElementID>& ids, bool visible) {
+    for (auto id : ids) {
+        auto elem = GetElement(id);
+        if (elem) elem->isVisible = visible;
+    }
+}
+
 UIElement* UIManager::GetElement(UIElementID id) {
     auto it = elements.find(id);
     return (it != elements.end()) ? it->second.get() : nullptr;

@@ -1,6 +1,9 @@
 #ifndef UIELEMENT_HPP
 #define UIELEMENT_HPP
 
+#include <cstddef>
+#include <functional>
+
 enum class UIElementID {
     RestartButton,
     BackToMenuButton,
@@ -8,6 +11,17 @@ enum class UIElementID {
     TwoPlayerButton,
     NoPlayerButton
 };
+
+namespace std{
+    template <>
+    struct hash<UIElementID>{
+        std::size_t operator()(const UIElementID& id) const noexcept{
+            return std::hash<std::underlying_type<UIElementID>::type>()(
+                static_cast<std::underlying_type<UIElementID>::type>(id)
+            );
+        }
+    };
+}
 
 class UIElement {
 public:

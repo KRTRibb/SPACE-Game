@@ -50,6 +50,7 @@ private:
 
     std::vector<UIElementID> menuUIElements;
     std::vector<UIElementID> gameOverUIElements;
+    std::vector<UIElementID> playingUIElements;
 
     void SetUpUI();
     void SetMenuUIVisible();

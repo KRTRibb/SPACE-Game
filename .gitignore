@@ -1,0 +1,18 @@
+# Ignore object files
+*.o
+
+# Ignore build output binary
+main
+
+# Ignore VSCodeCounter analysis folder
+.VSCodeCounter/
+
+# Ignore VSCode workspace settings (optional, if you don't want to share them)
+.vscode/
+
+# macOS Finder files
+.DS_Store
+
+# Editor swap/backup files
+*~
+*.swp
