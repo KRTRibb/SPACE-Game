@@ -9,7 +9,13 @@ enum class UIElementID {
     BackToMenuButton,
     SinglePlayerButton,
     TwoPlayerButton,
-    NoPlayerButton
+    NoPlayerButton,
+    TitleText,
+    RedShipHealthText,
+    YellowShipHealthText,
+    RedShipScoreText,
+    YellowShipScoreText,
+    WinnerText
 };
 
 namespace std{
@@ -26,7 +32,7 @@ namespace std{
 class UIElement {
 public:
     bool isVisible = false;
-    virtual void Update(float dt) = 0;
+    virtual void Update(float dt) {};
     virtual void Render() = 0;
     virtual ~UIElement() = default;
 };

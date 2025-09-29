@@ -4,7 +4,8 @@
 #include "raylib.h"
 #include "ResourceManager.hpp"
 #include "spaceship.hpp"
-#include "Button.hpp"
+#include "UIElements/Button.hpp"
+#include "UIElements/StaticText.hpp"
 #include <string>
 #include "UIManager.hpp"
 
@@ -57,8 +58,8 @@ private:
     void SetGameOverUIVisible();
     void SetPlayingUIVisible();
 
-    void DrawWindow();
-    void DrawGameOver();
+    void UpdatePlayingUI();
+    void UpdateGameOverUI();
     void DrawMenu();
     void StartSinglePlayer();
     void StartTwoPlayer();

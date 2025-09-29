@@ -4,6 +4,10 @@ void UIManager::AddElement(UIElementID id, std::unique_ptr<UIElement> element) {
     elements[id] = std::move(element);
 }
 
+void UIManager::RemoveElement(UIElementID id) {
+    elements.erase(id);
+}
+
 void UIManager::Update(float dt) {
     for (auto& pair : elements) {
         if (pair.second->isVisible) {

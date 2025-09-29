@@ -10,6 +10,7 @@
 class UIManager {
     public:
         void AddElement(UIElementID uiType, std::unique_ptr<UIElement> element);
+        void RemoveElement(UIElementID id);
         void Update(float dt);
         void Render();
         UIElement* GetElement(UIElementID id);

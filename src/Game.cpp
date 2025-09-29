@@ -19,12 +19,21 @@ Game::Game() {
     menuUIElements = {
         UIElementID::SinglePlayerButton,
         UIElementID::TwoPlayerButton,
-        UIElementID::NoPlayerButton
+        UIElementID::NoPlayerButton,
+        UIElementID::TitleText
     };
 
     gameOverUIElements = {
         UIElementID::BackToMenuButton,
-        UIElementID::RestartButton
+        UIElementID::RestartButton,
+        UIElementID::WinnerText,
+        UIElementID::RedShipScoreText,
+        UIElementID::YellowShipScoreText
+    };
+
+    playingUIElements = {
+        UIElementID::RedShipHealthText,
+        UIElementID::YellowShipHealthText
     };
 
     SetUpUI();
@@ -124,21 +133,20 @@ void Game::Render() {
     switch (state) {
         case GameState::Menu:
             DrawMenu();
-            uiManager.Render();
             break;
 
         case GameState::Playing:
-            DrawWindow();
+            UpdatePlayingUI();
             redShip->Draw();
             yellowShip->Draw();
-            uiManager.Render();
             break;
 
         case GameState::GameOver:
-            DrawGameOver();
-            uiManager.Render();
+            UpdateGameOverUI();
             break;
     }
+
+    uiManager.Render();
     EndDrawing();
 }
 
@@ -149,6 +157,11 @@ void Game::SetMenuUIVisible() {
     }
 
     for (const auto& id : gameOverUIElements) {
+        UIElement* element = uiManager.GetElement(id);
+        element->isVisible = false;
+    }
+
+    for (const auto& id : playingUIElements) {
         UIElement* element = uiManager.GetElement(id);
         element->isVisible = false;
     }
@@ -164,6 +177,11 @@ void Game::SetPlayingUIVisible() {
         UIElement* element = uiManager.GetElement(id);
         element->isVisible = false;
     }
+
+    for (const auto& id : playingUIElements) {
+        UIElement* element = uiManager.GetElement(id);
+        element->isVisible = true;
+    }
 }
 
 void Game::SetGameOverUIVisible() {
@@ -176,8 +194,12 @@ void Game::SetGameOverUIVisible() {
         UIElement* element = uiManager.GetElement(id);
         element->isVisible = false;
     }
-}
 
+    for (const auto& id : playingUIElements) {
+        UIElement* element = uiManager.GetElement(id);
+        element->isVisible = false;
+    }
+}
 
 void Game::Reset() {
     redShip->Reset();
@@ -193,35 +215,53 @@ void Game::SetUpUI() {
     std::unique_ptr<Button> twoPlayerButton = std::make_unique<Button> ("Two Player", WIDTH / 2 + 100, HEIGHT / 2, 25, GRAY, DARKGRAY, BLACK);
     std::unique_ptr<Button> noPlayerButton = std::make_unique<Button> ("AI vs AI", WIDTH / 2, HEIGHT / 2 + 75, 25, GRAY, DARKGRAY, BLACK);
 
+    std::unique_ptr<StaticText> titleText = std::make_unique<StaticText>("Space Battle", WIDTH / 2, HEIGHT / 2 - 100, WHITE, 50);
+    std::unique_ptr<StaticText> yellowShipHealthText = std::make_unique<StaticText>(TextFormat("Health: %.1f", 100.0f), 80, 25, WHITE, 25);
+    std::unique_ptr<StaticText> redShipHealthText = std::make_unique<StaticText>(TextFormat("Health: %.1f", 100.0f), WIDTH - 80, 25, WHITE, 25);
+    std::unique_ptr<StaticText> yellowShipScoreText = std::make_unique<StaticText>(TextFormat("%d", 0), WIDTH / 2 - 200, HEIGHT / 2 + 40, WHITE, 30);
+    std::unique_ptr<StaticText> redShipScoreText = std::make_unique<StaticText>(TextFormat("%d", 0), WIDTH / 2 + 200, HEIGHT / 2 + 40, WHITE, 30);
+    std::unique_ptr<StaticText> winnerText = std::make_unique<StaticText>("", WIDTH / 2, HEIGHT / 2 - 25, WHITE, 50);
+
     uiManager.AddElement(UIElementID::RestartButton, std::move(restartButton));
     uiManager.AddElement(UIElementID::BackToMenuButton, std::move(backToMenuButton));
     uiManager.AddElement(UIElementID::SinglePlayerButton, std::move(singlePlayerButton));
     uiManager.AddElement(UIElementID::TwoPlayerButton, std::move(twoPlayerButton));
     uiManager.AddElement(UIElementID::NoPlayerButton, std::move(noPlayerButton));
+
+    uiManager.AddElement(UIElementID::TitleText, std::move(titleText));
+    uiManager.AddElement(UIElementID::YellowShipHealthText, std::move(yellowShipHealthText));
+    uiManager.AddElement(UIElementID::RedShipHealthText, std::move(redShipHealthText));
+    uiManager.AddElement(UIElementID::YellowShipScoreText, std::move(yellowShipScoreText));
+    uiManager.AddElement(UIElementID::RedShipScoreText, std::move(redShipScoreText));
+    uiManager.AddElement(UIElementID::WinnerText, std::move(winnerText));  
 }
 
-void Game::DrawWindow() {
-    DrawTexture(resources.GetTexture("background"), 0, 0, WHITE);
+void Game::UpdatePlayingUI() {
+    DrawTexture(resources.GetTexture("background"), 0, 0, WHITE); 
 
     Rectangle middleRect = {WIDTH / 2 - MIDDLERECTWIDTH / 2, 0, MIDDLERECTWIDTH, HEIGHT};
     DrawRectangleRec(middleRect, BLACK);
 
-    DrawText(TextFormat("Health: %.1f", yellowShip->health), 10, 10, 25, WHITE);
+    auto yellowShipHealthText = dynamic_cast<StaticText*>(uiManager.GetElement(UIElementID::YellowShipHealthText));
+    yellowShipHealthText->UpdateText(TextFormat("Health: %.1f", yellowShip->health));
 
-    const char* rightHandText = TextFormat("Health: %.1f", redShip->health);
-    int textWidth = MeasureText(rightHandText, 25);
-    DrawText(rightHandText, WIDTH - 10 - textWidth, 10, 25, WHITE);
+    auto redShipHealthText = dynamic_cast<StaticText*>(uiManager.GetElement(UIElementID::RedShipHealthText));
+    redShipHealthText->UpdateText(TextFormat("Health: %.1f", redShip->health));
 }
 
-void Game::DrawGameOver() {
+void Game::UpdateGameOverUI() {
     DrawTexture(resources.GetTexture("background"), 0, 0, WHITE);
 
     const char* winnerMessage = winner == Winner::Red ? "RED WINS!" : "YELLOW WINS!";
-    int textWidth = MeasureText(winnerMessage, 50);
-    DrawText(winnerMessage, WIDTH / 2 - textWidth / 2, HEIGHT / 2 - 25, 50, WHITE);
+    
+    auto winnerText = dynamic_cast<StaticText*>(uiManager.GetElement(UIElementID::WinnerText));
+    winnerText->UpdateText(winnerMessage);
 
-    DrawText(TextFormat("%d", yellowShip->score), WIDTH / 2 - textWidth / 2 - 70, HEIGHT / 2 + yellowShip->shipRect.height, 30, WHITE);
-    DrawText(TextFormat("%d", redShip->score), WIDTH / 2 + textWidth / 2 + 70, HEIGHT / 2 + yellowShip->shipRect.height, 30, WHITE);
+    auto yellowShipScoreText = dynamic_cast<StaticText*>(uiManager.GetElement(UIElementID::YellowShipScoreText));
+    yellowShipScoreText->UpdateText(TextFormat("%d", yellowShip->score));
+
+    auto redShipScoreText = dynamic_cast<StaticText*>(uiManager.GetElement(UIElementID::RedShipScoreText));
+    redShipScoreText->UpdateText(TextFormat("%d", redShip->score));
 }
 
 void Game::DrawMenu() {

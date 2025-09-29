@@ -7,7 +7,7 @@ RAYLIB_CFLAGS := $(shell pkg-config --cflags raylib)
 RAYLIB_LDFLAGS := $(shell pkg-config --libs raylib)
 
 # Project files
-SRC = $(wildcard src/*.cpp)
+SRC = $(shell find src -name '*.cpp')
 OBJ = $(SRC:.cpp=.o)
 BIN = main
 
