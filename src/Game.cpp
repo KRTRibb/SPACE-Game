@@ -209,18 +209,18 @@ void Game::Reset() {
 }
 
 void Game::SetUpUI() {
-    std::unique_ptr<Button> restartButton = std::make_unique<Button> ("Restart Game", WIDTH / 2 - 100, HEIGHT / 2 + 25, 25, GRAY, DARKGRAY, BLACK);
-    std::unique_ptr<Button> backToMenuButton = std::make_unique<Button> ("Back To Menu", WIDTH / 2 + 100, HEIGHT / 2 + 25, 25, GRAY, DARKGRAY, BLACK);
-    std::unique_ptr<Button> singlePlayerButton = std::make_unique<Button> ("Single Player", WIDTH / 2 - 100, HEIGHT / 2, 25, GRAY, DARKGRAY, BLACK);\
-    std::unique_ptr<Button> twoPlayerButton = std::make_unique<Button> ("Two Player", WIDTH / 2 + 100, HEIGHT / 2, 25, GRAY, DARKGRAY, BLACK);
-    std::unique_ptr<Button> noPlayerButton = std::make_unique<Button> ("AI vs AI", WIDTH / 2, HEIGHT / 2 + 75, 25, GRAY, DARKGRAY, BLACK);
+    std::unique_ptr<Button> restartButton = std::make_unique<Button> ("Restart Game", WIDTH / 2 - 125, HEIGHT / 2 + 25, 30, GRAY, DARKGRAY, BLACK);
+    std::unique_ptr<Button> backToMenuButton = std::make_unique<Button> ("Back To Menu", WIDTH / 2 + 125, HEIGHT / 2 + 25, 30, GRAY, DARKGRAY, BLACK);
+    std::unique_ptr<Button> singlePlayerButton = std::make_unique<Button> ("Single Player", WIDTH / 2 - 100, HEIGHT / 2, 30, GRAY, DARKGRAY, BLACK);\
+    std::unique_ptr<Button> twoPlayerButton = std::make_unique<Button> ("Two Player", WIDTH / 2 + 100, HEIGHT / 2, 30, GRAY, DARKGRAY, BLACK);
+    std::unique_ptr<Button> noPlayerButton = std::make_unique<Button> ("AI vs AI", WIDTH / 2, HEIGHT / 2 + 75, 30, GRAY, DARKGRAY, BLACK);
 
-    std::unique_ptr<StaticText> titleText = std::make_unique<StaticText>("Space Battle", WIDTH / 2, HEIGHT / 2 - 100, WHITE, 50);
+    std::unique_ptr<FloatingText> titleText = std::make_unique<FloatingText>("Space Battle", WIDTH / 2, HEIGHT / 2 - 150, WHITE, 100, 10);
     std::unique_ptr<StaticText> yellowShipHealthText = std::make_unique<StaticText>(TextFormat("Health: %.1f", 100.0f), 80, 25, WHITE, 25);
     std::unique_ptr<StaticText> redShipHealthText = std::make_unique<StaticText>(TextFormat("Health: %.1f", 100.0f), WIDTH - 80, 25, WHITE, 25);
-    std::unique_ptr<StaticText> yellowShipScoreText = std::make_unique<StaticText>(TextFormat("%d", 0), WIDTH / 2 - 200, HEIGHT / 2 + 40, WHITE, 30);
-    std::unique_ptr<StaticText> redShipScoreText = std::make_unique<StaticText>(TextFormat("%d", 0), WIDTH / 2 + 200, HEIGHT / 2 + 40, WHITE, 30);
-    std::unique_ptr<StaticText> winnerText = std::make_unique<StaticText>("", WIDTH / 2, HEIGHT / 2 - 25, WHITE, 50);
+    std::unique_ptr<StaticText> yellowShipScoreText = std::make_unique<StaticText>(TextFormat("%d", 0), WIDTH / 2 - 250, HEIGHT / 2 + 40, WHITE, 30);
+    std::unique_ptr<StaticText> redShipScoreText = std::make_unique<StaticText>(TextFormat("%d", 0), WIDTH / 2 + 250, HEIGHT / 2 + 40, WHITE, 30);
+    std::unique_ptr<FloatingText> winnerText = std::make_unique<FloatingText>("", WIDTH / 2, HEIGHT / 2 - 45, WHITE, 50, 40);
 
     uiManager.AddElement(UIElementID::RestartButton, std::move(restartButton));
     uiManager.AddElement(UIElementID::BackToMenuButton, std::move(backToMenuButton));
@@ -254,7 +254,7 @@ void Game::UpdateGameOverUI() {
 
     const char* winnerMessage = winner == Winner::Red ? "RED WINS!" : "YELLOW WINS!";
     
-    auto winnerText = dynamic_cast<StaticText*>(uiManager.GetElement(UIElementID::WinnerText));
+    auto winnerText = dynamic_cast<FloatingText*>(uiManager.GetElement(UIElementID::WinnerText));
     winnerText->UpdateText(winnerMessage);
 
     auto yellowShipScoreText = dynamic_cast<StaticText*>(uiManager.GetElement(UIElementID::YellowShipScoreText));

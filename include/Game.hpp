@@ -6,6 +6,7 @@
 #include "spaceship.hpp"
 #include "UIElements/Button.hpp"
 #include "UIElements/StaticText.hpp"
+#include "UIElements/FloatingText.hpp"
 #include <string>
 #include "UIManager.hpp"
 
