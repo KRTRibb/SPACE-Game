@@ -1,9 +1,9 @@
 #include "raylib.h"
-#include "spaceship.hpp"
-#include "weapons.hpp"
+#include "core/spaceship.hpp"
+#include "core/weapons.hpp"
 #include <iostream>
 #include <cmath>
-#include "mathUtils.hpp"
+#include "core/mathUtils.hpp"
 
 void EnergyWeapon::Render() {
     Rectangle src = {0, 0, (float)image.width, (float)image.height};

@@ -4,11 +4,11 @@
 #include "raylib.h"
 #include "ResourceManager.hpp"
 #include "spaceship.hpp"
-#include "UIElements/Button.hpp"
-#include "UIElements/StaticText.hpp"
-#include "UIElements/FloatingText.hpp"
+#include "ui/UIElements/Button.hpp"
+#include "ui/UIElements/StaticText.hpp"
+#include "ui/UIElements/FloatingText.hpp"
 #include <string>
-#include "UIManager.hpp"
+#include "ui/UIManager.hpp"
 
 
 enum class GameState {

@@ -6,7 +6,7 @@
 #include "config.h"
 #include "ResourceManager.hpp"
 #include "weapons.hpp"
-#include "IController.hpp"
+#include "controllers/IController.hpp"
 
 enum class Side {
     LEFT, 

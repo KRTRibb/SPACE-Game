@@ -1,4 +1,4 @@
-#include "UIElements/StaticText.hpp"
+#include "ui/UIElements/StaticText.hpp"
 #include "raylib.h"
 
 StaticText::StaticText(std::string txt, int cX, int y, Color c, int fsize) 

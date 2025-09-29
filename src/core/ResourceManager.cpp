@@ -1,5 +1,5 @@
-#include "ResourceManager.hpp"
-#include "config.h"
+#include "core/ResourceManager.hpp"
+#include "core/config.h"
 
 void ResourceManager::loadTexture(const std::string& name, const std::string& filepath) {
     if (textures.count(name) == 0) {

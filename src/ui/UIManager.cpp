@@ -1,4 +1,4 @@
-#include "UIManager.hpp"
+#include "ui/UIManager.hpp"
 
 void UIManager::AddElement(UIElementID id, std::unique_ptr<UIElement> element) {
     elements[id] = std::move(element);

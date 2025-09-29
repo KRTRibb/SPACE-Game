@@ -1,6 +1,6 @@
 #include <cmath>
 #include <cmath>
-#include "mathUtils.hpp"
+#include "core/mathUtils.hpp"
 
 
 Vector2 math::NormalizeVec(const Vector2& v) {

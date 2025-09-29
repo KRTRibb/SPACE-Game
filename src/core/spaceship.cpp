@@ -1,11 +1,11 @@
 #include "raylib.h"
-#include "config.h"
-#include "spaceship.hpp"
+#include "core/config.h"
+#include "core/spaceship.hpp"
 #include <vector>
-#include "ResourceManager.hpp"
-#include "weapons.hpp"
+#include "core/ResourceManager.hpp"
+#include "core/weapons.hpp"
 #include <iostream>
-#include "mathUtils.hpp"
+#include "core/mathUtils.hpp"
 
 const float initialHelth = 10.0f;
 const int initialBulletLim = 5;

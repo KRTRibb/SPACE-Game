@@ -2,7 +2,7 @@
 #define STATICTEXT_HPP
 
 #include "raylib.h"
-#include "UIElement.hpp"
+#include "ui/UIElement.hpp"
 #include <string>
 
 class StaticText: public UIElement {

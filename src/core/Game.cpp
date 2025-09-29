@@ -1,10 +1,10 @@
 #include "raylib.h"
-#include "ResourceManager.hpp"
-#include "spaceship.hpp"
-#include "Game.hpp"
-#include "PlayerController.hpp"
-#include "AIController.hpp"
-#include "config.h"
+#include "core/ResourceManager.hpp"
+#include "core/spaceship.hpp"
+#include "core/Game.hpp"
+#include "controllers/PlayerController.hpp"
+#include "controllers/AIController.hpp"
+#include "core/config.h"
 #include <string>
 
 
@@ -40,14 +40,14 @@ Game::Game() {
 
     SetMenuUIVisible();
 
-    resources.loadTexture("redShip", "graphics/spaceship_red.png");
-    resources.loadTexture("yellowShip", "graphics/spaceship_yellow.png");
-    resources.loadTexture("background", "graphics/space.png");
-    resources.loadTexture("energyLeftFacing", "graphics/energyLeftFacing.png");
-    resources.loadTexture("energyRightFacing", "graphics/energyRightFacing.png");
-    resources.loadSound("shoot", "graphics/Gun+Silencer.mp3");
-    resources.loadSound("hit", "graphics/Grenade+1.mp3");
-    resources.loadSound("energyShoot", "graphics/spaceLaser.wav");
+    resources.loadTexture("redShip", "assets/images/spaceship_red.png");
+    resources.loadTexture("yellowShip", "assets/images/spaceship_yellow.png");
+    resources.loadTexture("background", "assets/images/space.png");
+    resources.loadTexture("energyLeftFacing", "assets/images/energyLeftFacing.png");
+    resources.loadTexture("energyRightFacing", "assets/images/energyRightFacing.png");
+    resources.loadSound("shoot", "assets/sounds/Gun+Silencer.mp3");
+    resources.loadSound("hit", "assets/sounds/Grenade+1.mp3");
+    resources.loadSound("energyShoot", "assets/sounds/spaceLaser.wav");
 };
 
 Game::~Game() {

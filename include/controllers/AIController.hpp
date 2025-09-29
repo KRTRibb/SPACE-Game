@@ -4,8 +4,8 @@
 #include "IController.hpp"
 #include "raylib.h"
 #include <vector>
-#include "spaceship.hpp"
-#include "mathUtils.hpp"
+#include "core/spaceship.hpp"
+#include "core/mathUtils.hpp"
 
 enum class AIMode {
     Offensive,

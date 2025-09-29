@@ -1,4 +1,4 @@
-#include "AIController.hpp"
+#include "controllers/AIController.hpp"
 #include "raylib.h"
 #include <cmath>
 
