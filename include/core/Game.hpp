@@ -18,7 +18,7 @@ enum class GameState {
 };
 
 enum class GameMode {
-    None, 
+    NoPlayer, 
     SinglePlayer,
     TwoPlayer
 };
@@ -62,9 +62,7 @@ private:
     void UpdatePlayingUI();
     void UpdateGameOverUI();
     void DrawMenu();
-    void StartSinglePlayer();
-    void StartTwoPlayer();
-    void StartNoPlayer();
+    void StartGame(GameMode mode);
 };
 
 

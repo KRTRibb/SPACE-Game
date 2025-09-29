@@ -6,6 +6,7 @@
 #include "controllers/AIController.hpp"
 #include "core/config.h"
 #include <string>
+#include <vector>
 
 
 Game::Game() {
@@ -71,21 +72,21 @@ void Game::Update() {
         case GameState::Menu: {
             auto singleBtn = dynamic_cast<Button*>(uiManager.GetElement(UIElementID::SinglePlayerButton));
             if (singleBtn && singleBtn->WasClicked()) {
-                StartSinglePlayer();
+                StartGame(GameMode::SinglePlayer);
                 state = GameState::Playing;
                 SetPlayingUIVisible();
             }
 
             auto twoBtn = dynamic_cast<Button*>(uiManager.GetElement(UIElementID::TwoPlayerButton));
             if (twoBtn && twoBtn->WasClicked()) {
-                StartTwoPlayer();
+                StartGame(GameMode::TwoPlayer);
                 state = GameState::Playing;
                 SetPlayingUIVisible();
             }
 
             auto noBtn = dynamic_cast<Button*>(uiManager.GetElement(UIElementID::NoPlayerButton));
             if (noBtn && noBtn->WasClicked()) {
-                StartNoPlayer();
+                StartGame(GameMode::NoPlayer);
                 state = GameState::Playing;
                 SetPlayingUIVisible();
             }
@@ -268,21 +269,14 @@ void Game::DrawMenu() {
     DrawTexture(resources.GetTexture("background"), 0, 0, WHITE);
 }
 
-void Game::StartSinglePlayer() {
-    std::unique_ptr playerController = std::make_unique<PlayerController>(
-        std::vector<int>{KEY_W, KEY_S, KEY_A, KEY_D}, KEY_C, KEY_V
-    );
-
-    // Player Ship
-    yellowShip = std::make_unique<Spaceship>(
+void Game::StartGame(GameMode mode) {
+        yellowShip = std::make_unique<Spaceship>(
         resources.GetTexture("yellowShip"), Side::LEFT,
         resources.GetSound("shoot"), resources.GetSound("hit"), 
         resources.GetTexture("energyLeftFacing"), resources.GetSound("energyShoot"),
-        std::move(playerController)
+        nullptr
     );
 
-
-    // AI Ship
     redShip = std::make_unique<Spaceship>(
         resources.GetTexture("redShip"), Side::RIGHT,
         resources.GetSound("shoot"), resources.GetSound("hit"), 
@@ -290,60 +284,49 @@ void Game::StartSinglePlayer() {
         nullptr
     );
 
-    redShip->controller = std::make_unique<AIController>(redShip.get(), yellowShip.get());
+    switch (mode) {
+        case GameMode::TwoPlayer: {
+            std::unique_ptr yellowController = std::make_unique<PlayerController>(
+                std::vector<int>{KEY_W, KEY_S, KEY_A, KEY_D}, KEY_C, KEY_V
+            );
 
-    #if AITest
-    yellowShip->health = 100;
-    redShip->health = 100;
-    #endif
-}
+            std::unique_ptr redController = std::make_unique<PlayerController>(
+            std::vector<int>{KEY_UP, KEY_DOWN, KEY_LEFT, KEY_RIGHT}, KEY_M, KEY_K
+            );
 
-void Game::StartTwoPlayer() {
-    std::unique_ptr redController = std::make_unique<PlayerController>(
-        std::vector<int>{KEY_UP, KEY_DOWN, KEY_LEFT, KEY_RIGHT}, KEY_M, KEY_K
-    );
-    std::unique_ptr yellowController = std::make_unique<PlayerController>(
-        std::vector<int>{KEY_W, KEY_S, KEY_A, KEY_D}, KEY_C, KEY_V
-    );
+            yellowShip->controller = std::move(yellowController);
+            redShip->controller = std::move(redController);
+            break;
+        }
 
+        case GameMode::SinglePlayer: {
+            std::unique_ptr yellowController = std::make_unique<PlayerController>(
+                std::vector<int>{KEY_W, KEY_S, KEY_A, KEY_D}, KEY_C, KEY_V
+            );
 
-    redShip = std::make_unique<Spaceship>(
-        resources.GetTexture("redShip"), Side::RIGHT,
-        resources.GetSound("shoot"), resources.GetSound("hit"), 
-        resources.GetTexture("energyRightFacing"), resources.GetSound("energyShoot"),
-        std::move(redController)
-    );
+            std::unique_ptr redAIController = std::make_unique<AIController>(redShip.get(), yellowShip.get());
 
-    yellowShip = std::make_unique<Spaceship>(
-        resources.GetTexture("yellowShip"), Side::LEFT,
-        resources.GetSound("shoot"), resources.GetSound("hit"), 
-        resources.GetTexture("energyLeftFacing"), resources.GetSound("energyShoot"),
-        std::move(yellowController)
-    );
-}
+            yellowShip->controller = std::move(yellowController);
+            redShip->controller = std::move(redAIController);
 
-void Game::StartNoPlayer() {
-    // AI ship 1
-    yellowShip = std::make_unique<Spaceship>(
-        resources.GetTexture("yellowShip"), Side::LEFT,
-        resources.GetSound("shoot"), resources.GetSound("hit"), 
-        resources.GetTexture("energyLeftFacing"), resources.GetSound("energyShoot"),
-        nullptr
-    );
+            #if AITest
+            yellowShip->health = 100;
+            redShip->health = 100;
+            #endif
 
-    // AI Ship 2
-    redShip = std::make_unique<Spaceship>(
-        resources.GetTexture("redShip"), Side::RIGHT,
-        resources.GetSound("shoot"), resources.GetSound("hit"), 
-        resources.GetTexture("energyRightFacing"), resources.GetSound("energyShoot"),
-        nullptr
-    );
+            break;
+        }
 
-    yellowShip->controller = std::make_unique<AIController>(yellowShip.get(), redShip.get());
-    redShip->controller = std::make_unique<AIController>(redShip.get(), yellowShip.get());
+        case GameMode::NoPlayer: {
+            yellowShip->controller = std::make_unique<AIController>(yellowShip.get(), redShip.get());
+            redShip->controller = std::make_unique<AIController>(redShip.get(), yellowShip.get());
 
-    #if AITest
-    yellowShip->health = 100;
-    redShip->health = 100;
-    #endif
+            #if AITest
+            yellowShip->health = 100;
+            redShip->health = 100;
+            #endif
+            
+            break;
+        }
+    }
 }
