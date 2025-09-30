@@ -15,7 +15,9 @@ enum class UIElementID {
     YellowShipHealthText,
     RedShipScoreText,
     YellowShipScoreText,
-    WinnerText
+    WinnerText,
+    MiddleDivider,
+    BackgroundImage
 };
 
 // Makes the enum class hashable so it can be used as a key in unordered_map

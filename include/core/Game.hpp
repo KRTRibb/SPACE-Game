@@ -8,6 +8,8 @@
 #include "ui/UIElements/Button.hpp"
 #include "ui/UIElements/StaticText.hpp"
 #include "ui/UIElements/FloatingText.hpp"
+#include "ui/UIElements/Border.hpp"
+#include "ui/UIElements/Picture.hpp"
 #include <string>
 
 
@@ -61,7 +63,6 @@ private:
 
     void UpdatePlayingUI();
     void UpdateGameOverUI();
-    void DrawMenu();
     void StartGame(GameMode mode);
 };
 
