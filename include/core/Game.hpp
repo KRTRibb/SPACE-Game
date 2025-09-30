@@ -10,13 +10,15 @@
 #include "ui/UIElements/FloatingText.hpp"
 #include "ui/UIElements/Border.hpp"
 #include "ui/UIElements/Image.hpp"
+#include "ui/UIElements/Slider.hpp"
 #include <string>
 
 
 enum class GameState {
     Menu,
     Playing,
-    GameOver
+    GameOver,
+    Settings
 };
 
 enum class GameMode {
@@ -55,15 +57,23 @@ private:
     std::vector<ui::UIElementID> menuUIElements;
     std::vector<ui::UIElementID> gameOverUIElements;
     std::vector<ui::UIElementID> playingUIElements;
+    std::vector<ui::UIElementID> settingsUIElements;
+
+    GameState previousState = GameState::Menu;
 
     void SetUpUI();
+    void SetUIVisibility(const std::vector<ui::UIElementID>& ids, bool visible);
     void SetMenuUIVisible();
     void SetGameOverUIVisible();
     void SetPlayingUIVisible();
+    void SetSettingsUIVisible();
+    void SetStateUIVisibility(GameState state);
 
     void UpdatePlayingUI();
     void UpdateGameOverUI();
     void StartGame(GameMode mode);
+
+    void UpdateVolume();
 };
 
 

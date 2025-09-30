@@ -18,7 +18,10 @@ namespace ui{
         YellowShipScoreText,
         WinnerText,
         MiddleDivider,
-        BackgroundImage
+        BackgroundImage,
+        SettingsButton,
+        VolumeSlider,
+        BackFromSettingsButton
     };
 
     class UIElement {

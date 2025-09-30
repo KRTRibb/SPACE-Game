@@ -22,7 +22,8 @@ Game::Game() {
         ui::UIElementID::TwoPlayerButton,
         ui::UIElementID::NoPlayerButton,
         ui::UIElementID::TitleText,
-        ui::UIElementID::BackgroundImage
+        ui::UIElementID::BackgroundImage,
+        ui::UIElementID::SettingsButton
     };
 
     gameOverUIElements = {
@@ -31,14 +32,21 @@ Game::Game() {
         ui::UIElementID::WinnerText,
         ui::UIElementID::RedShipScoreText,
         ui::UIElementID::YellowShipScoreText,
-        ui::UIElementID::BackgroundImage
+        ui::UIElementID::BackgroundImage,
+        ui::UIElementID::SettingsButton
     };
 
     playingUIElements = {
         ui::UIElementID::RedShipHealthText,
         ui::UIElementID::YellowShipHealthText,
         ui::UIElementID::MiddleDivider,
-        ui::UIElementID::BackgroundImage
+        ui::UIElementID::BackgroundImage,
+    };
+
+    settingsUIElements = {
+        ui::UIElementID::BackFromSettingsButton,
+        ui::UIElementID::BackgroundImage,
+        ui::UIElementID::VolumeSlider
     };
 
     resources.loadTexture("redShip", "assets/images/spaceship_red.png");
@@ -79,21 +87,31 @@ void Game::Update() {
             if (singleBtn && singleBtn->WasClicked()) {
                 StartGame(GameMode::SinglePlayer);
                 state = GameState::Playing;
-                SetPlayingUIVisible();
+                previousState = GameState::Menu;
+                SetStateUIVisibility(state);
             }
 
             auto twoBtn = dynamic_cast<ui::Button*>(uiManager.GetElement(ui::UIElementID::TwoPlayerButton));
             if (twoBtn && twoBtn->WasClicked()) {
                 StartGame(GameMode::TwoPlayer);
                 state = GameState::Playing;
-                SetPlayingUIVisible();
+                previousState = GameState::Menu;
+                SetStateUIVisibility(state);
             }
 
             auto noBtn = dynamic_cast<ui::Button*>(uiManager.GetElement(ui::UIElementID::NoPlayerButton));
             if (noBtn && noBtn->WasClicked()) {
                 StartGame(GameMode::NoPlayer);
                 state = GameState::Playing;
-                SetPlayingUIVisible();
+                previousState = GameState::Menu;
+                SetStateUIVisibility(state);
+            }
+
+            auto settingsBtn = dynamic_cast<ui::Button*>(uiManager.GetElement(ui::UIElementID::SettingsButton));
+            if (settingsBtn && settingsBtn->WasClicked()) {
+                state = GameState::Settings;
+                previousState = GameState::Menu;
+                SetStateUIVisibility(state);
             }
             break;
         }
@@ -104,15 +122,23 @@ void Game::Update() {
             if (redShip->IsDead()) {
                 winner = Winner::Yellow;
                 state = GameState::GameOver;
-                SetGameOverUIVisible();
+                previousState = GameState::Playing;
+                SetStateUIVisibility(state);
             }
 
             if (yellowShip->IsDead()) {
                 winner = Winner::Red;
                 state = GameState::GameOver;
-                SetGameOverUIVisible();
+                previousState = GameState::Playing;
+                SetStateUIVisibility(state);
             }
 
+            auto settingsBtn = dynamic_cast<ui::Button*>(uiManager.GetElement(ui::UIElementID::SettingsButton));
+            if (settingsBtn && settingsBtn->WasClicked()) {
+                state = GameState::Settings;
+                previousState = GameState::Playing;
+                SetStateUIVisibility(state);
+            }
             break;
         }
 
@@ -120,14 +146,33 @@ void Game::Update() {
             auto restartBtn = dynamic_cast<ui::Button*>(uiManager.GetElement(ui::UIElementID::RestartButton));
             if (restartBtn && restartBtn->WasClicked()) {
                 Reset();
-                SetPlayingUIVisible();
+                state = GameState::Playing;
+                previousState = GameState::GameOver;
+                SetStateUIVisibility(state);
             }
             auto menuBtn = dynamic_cast<ui::Button*>(uiManager.GetElement(ui::UIElementID::BackToMenuButton));
             if (menuBtn && menuBtn->WasClicked()) {
                 state = GameState::Menu;
-                SetMenuUIVisible();
+                previousState = GameState::GameOver;
+                SetStateUIVisibility(state);
             }    
+
+            auto settingsBtn = dynamic_cast<ui::Button*>(uiManager.GetElement(ui::UIElementID::SettingsButton));
+            if (settingsBtn && settingsBtn->WasClicked()) {
+                state = GameState::Settings;
+                previousState = GameState::GameOver;
+                SetStateUIVisibility(state);
+            }
             break;
+        }
+
+        case GameState::Settings: {
+            auto backBtn = dynamic_cast<ui::Button*>(uiManager.GetElement(ui::UIElementID::BackFromSettingsButton));
+            if (backBtn && backBtn->WasClicked()) {
+                state = previousState;
+                previousState = GameState::Settings;
+                SetStateUIVisibility(state);
+            }
         }
     }
 }
@@ -135,90 +180,100 @@ void Game::Update() {
 void Game::Render() {
     BeginDrawing();
     ClearBackground(BLACK);
-    uiManager.Render();
 
     switch (state) {
         case GameState::Menu:
+            uiManager.Render();
             break;
 
         case GameState::Playing:
             UpdatePlayingUI();
+            uiManager.Render();
             redShip->Draw();
             yellowShip->Draw();
             break;
 
         case GameState::GameOver:
             UpdateGameOverUI();
+            uiManager.Render();
+            break;
+
+        case GameState::Settings:
+            uiManager.Render();
             break;
     }
 
     EndDrawing();
 }
 
+void Game::SetUIVisibility(const std::vector<ui::UIElementID>& ids, bool visible) {
+    for (const auto& id : ids) {
+        ui::UIElement* element = uiManager.GetElement(id);
+        if (element) {
+            element->isVisible = visible;
+        }
+    }
+}
+
 void Game::SetMenuUIVisible() {
-    for (const auto& id : gameOverUIElements) {
-        ui::UIElement* element = uiManager.GetElement(id);
-        element->isVisible = false;
-    }
-
-    for (const auto& id : playingUIElements) {
-        ui::UIElement* element = uiManager.GetElement(id);
-        element->isVisible = false;
-    }
-
-    for (const auto& id : menuUIElements) {
-        ui::UIElement* element = uiManager.GetElement(id);
-        element->isVisible = true;
-    }
+    SetUIVisibility(gameOverUIElements, false);
+    SetUIVisibility(playingUIElements, false);
+    SetUIVisibility(settingsUIElements, false);
+    SetUIVisibility(menuUIElements, true);
 }
 
 void Game::SetPlayingUIVisible() {
-    for (const auto& id : menuUIElements) {
-        ui::UIElement* element = uiManager.GetElement(id);
-        element->isVisible = false;
-    }
-
-    for (const auto& id : gameOverUIElements) {
-        ui::UIElement* element = uiManager.GetElement(id);
-        element->isVisible = false;
-    }
-
-    for (const auto& id : playingUIElements) {
-        ui::UIElement* element = uiManager.GetElement(id);
-        element->isVisible = true;
-    }
+    SetUIVisibility(gameOverUIElements, false);
+    SetUIVisibility(menuUIElements, false);
+    SetUIVisibility(settingsUIElements, false);
+    SetUIVisibility(playingUIElements, true);
 }
 
 void Game::SetGameOverUIVisible() {
-    for (const auto& id : menuUIElements) {
-        ui::UIElement* element = uiManager.GetElement(id);
-        element->isVisible = false;
-    }
+    SetUIVisibility(playingUIElements, false);
+    SetUIVisibility(menuUIElements, false);
+    SetUIVisibility(settingsUIElements, false);
+    SetUIVisibility(gameOverUIElements, true);
+}
 
-    for (const auto& id : playingUIElements) {
-        ui::UIElement* element = uiManager.GetElement(id);
-        element->isVisible = false;
-    }
+void Game::SetSettingsUIVisible() {
+    SetUIVisibility(playingUIElements, false);
+    SetUIVisibility(menuUIElements, false);
+    SetUIVisibility(gameOverUIElements, false);
+    SetUIVisibility(settingsUIElements, true);
+}
 
-    for (const auto& id : gameOverUIElements) {
-        ui::UIElement* element = uiManager.GetElement(id);
-        element->isVisible = true;
+void Game::SetStateUIVisibility(GameState state){
+    switch (state) {
+        case GameState::Menu:
+            SetMenuUIVisible();
+            break;
+        case GameState::Playing:
+            SetPlayingUIVisible();
+            break;
+        case GameState::GameOver:
+            SetGameOverUIVisible();
+            break;
+        case GameState::Settings:
+            SetSettingsUIVisible();
+            break;
     }
 }
 
 void Game::Reset() {
     redShip->Reset();
     yellowShip->Reset();
-    state = GameState::Playing;
     winner = Winner::None;
 }
 
 void Game::SetUpUI() {
     std::unique_ptr<ui::Button> restartButton = std::make_unique<ui::Button> ("Restart Game", WIDTH / 2 - 125, HEIGHT / 2 + 25, 30, GRAY, DARKGRAY, BLACK);
     std::unique_ptr<ui::Button> backToMenuButton = std::make_unique<ui::Button> ("Back To Menu", WIDTH / 2 + 125, HEIGHT / 2 + 25, 30, GRAY, DARKGRAY, BLACK);
-    std::unique_ptr<ui::Button> singlePlayerButton = std::make_unique<ui::Button> ("Single Player", WIDTH / 2 - 100, HEIGHT / 2, 30, GRAY, DARKGRAY, BLACK);\
+    std::unique_ptr<ui::Button> singlePlayerButton = std::make_unique<ui::Button> ("Single Player", WIDTH / 2 - 100, HEIGHT / 2, 30, GRAY, DARKGRAY, BLACK);
     std::unique_ptr<ui::Button> twoPlayerButton = std::make_unique<ui::Button> ("Two Player", WIDTH / 2 + 100, HEIGHT / 2, 30, GRAY, DARKGRAY, BLACK);
     std::unique_ptr<ui::Button> noPlayerButton = std::make_unique<ui::Button> ("AI vs AI", WIDTH / 2, HEIGHT / 2 + 75, 30, GRAY, DARKGRAY, BLACK);
+    std::unique_ptr<ui::Button> settingsButton = std::make_unique<ui::Button> ("|||", WIDTH - 50, HEIGHT - 60, 30, GRAY, DARKGRAY, BLACK);
+    std::unique_ptr<ui::Button> backFromSettingsButton = std::make_unique<ui::Button> ("Back", WIDTH - 50, 20, 30, GRAY, DARKGRAY, BLACK);
 
     std::unique_ptr<ui::FloatingText> titleText = std::make_unique<ui::FloatingText>("Space Battle", WIDTH / 2, HEIGHT / 2 - 150, WHITE, 100, 10);
     std::unique_ptr<ui::StaticText> yellowShipHealthText = std::make_unique<ui::StaticText>(TextFormat("Health: %.1f", 100.0f), 80, 25, WHITE, 25);
@@ -231,11 +286,15 @@ void Game::SetUpUI() {
 
     std::unique_ptr<ui::Image> backgroundImage = std::make_unique<ui::Image>(resources.GetTexture("background"), 0, 0, WIDTH, HEIGHT);
 
+    std::unique_ptr<ui::Slider> volumeSlider = std::make_unique<ui::Slider>("Volume", WIDTH / 2, HEIGHT / 2, 300, 20, 0.0f, 1.0f, 0.5f, DARKGRAY, LIGHTGRAY);
+
     uiManager.AddElement(ui::UIElementID::RestartButton, std::move(restartButton));
     uiManager.AddElement(ui::UIElementID::BackToMenuButton, std::move(backToMenuButton));
     uiManager.AddElement(ui::UIElementID::SinglePlayerButton, std::move(singlePlayerButton));
     uiManager.AddElement(ui::UIElementID::TwoPlayerButton, std::move(twoPlayerButton));
     uiManager.AddElement(ui::UIElementID::NoPlayerButton, std::move(noPlayerButton));
+    uiManager.AddElement(ui::UIElementID::SettingsButton, std::move(settingsButton));
+    uiManager.AddElement(ui::UIElementID::BackFromSettingsButton, std::move(backFromSettingsButton));
 
     uiManager.AddElement(ui::UIElementID::TitleText, std::move(titleText));
     uiManager.AddElement(ui::UIElementID::YellowShipHealthText, std::move(yellowShipHealthText));
@@ -245,6 +304,8 @@ void Game::SetUpUI() {
     uiManager.AddElement(ui::UIElementID::WinnerText, std::move(winnerText));  
 
     uiManager.AddElement(ui::UIElementID::MiddleDivider, std::move(middleDivider));
+
+    uiManager.AddElement(ui::UIElementID::VolumeSlider, std::move(volumeSlider));
 
     uiManager.AddElement(ui::UIElementID::BackgroundImage, std::move(backgroundImage));
 }
@@ -268,6 +329,14 @@ void Game::UpdateGameOverUI() {
 
     auto redShipScoreText = dynamic_cast<ui::StaticText*>(uiManager.GetElement(ui::UIElementID::RedShipScoreText));
     redShipScoreText->UpdateText(TextFormat("%d", redShip->score));
+}
+
+void Game::UpdateVolume() {
+    auto volumeSlider = dynamic_cast<ui::Slider*>(uiManager.GetElement(ui::UIElementID::VolumeSlider));
+    if (volumeSlider) {
+        float volume = volumeSlider->GetValue();
+        SetMasterVolume(volume);
+    }
 }
 
 void Game::StartGame(GameMode mode) {
