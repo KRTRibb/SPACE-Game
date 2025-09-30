@@ -9,6 +9,7 @@
 #include "controllers/IController.hpp"
 
 enum class Side {
+    NONE,
     LEFT, 
     RIGHT
 };

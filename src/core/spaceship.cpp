@@ -31,7 +31,7 @@ Spaceship::Spaceship(const Texture2D& ship, Side side, Sound& shoot, Sound& hit,
     bulletDamage = 1.0;
 
     energySprite = energyImage;
-    rotation = side == Side::LEFT ? 270.0f : 90.0f; 
+    rotation = side == Side::RIGHT ? 90.0f : 270.0f; 
 }
 
 bool Spaceship::InBounds(float newX, float newY) {
@@ -46,6 +46,13 @@ bool Spaceship::InBounds(float newX, float newY) {
         return (newX >= WIDTH / 2 &&
                 newY >= 0 &&
                 newX + shipRect.width <= WIDTH &&
+                newY + shipRect.height <= HEIGHT);
+    }
+
+    if (shipSide == Side::NONE) {
+        return (newX >= 0 &&
+                newY >= 0 &&
+                newX + shipRect.width <= WIDTH && 
                 newY + shipRect.height <= HEIGHT);
     }
 

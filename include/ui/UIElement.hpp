@@ -18,6 +18,10 @@ enum class UIElementID {
     WinnerText
 };
 
+// Makes the enum class hashable so it can be used as a key in unordered_map
+// Does this by converting it to its underlying type (usually int but could be usigned in, etc)
+// It converts that int to a size_t using the standard hash function 
+// This allows UIElementID to be used as a key.
 namespace std{
     template <>
     struct hash<UIElementID>{
