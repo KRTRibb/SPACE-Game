@@ -4,21 +4,32 @@
 #include <cstddef>
 #include <functional>
 
-enum class UIElementID {
-    RestartButton,
-    BackToMenuButton,
-    SinglePlayerButton,
-    TwoPlayerButton,
-    NoPlayerButton,
-    TitleText,
-    RedShipHealthText,
-    YellowShipHealthText,
-    RedShipScoreText,
-    YellowShipScoreText,
-    WinnerText,
-    MiddleDivider,
-    BackgroundImage
-};
+namespace ui{
+    enum class UIElementID {
+        RestartButton,
+        BackToMenuButton,
+        SinglePlayerButton,
+        TwoPlayerButton,
+        NoPlayerButton,
+        TitleText,
+        RedShipHealthText,
+        YellowShipHealthText,
+        RedShipScoreText,
+        YellowShipScoreText,
+        WinnerText,
+        MiddleDivider,
+        BackgroundImage
+    };
+
+    class UIElement {
+    public:
+        bool isVisible = false;
+        virtual void Update(float dt) {};
+        virtual void Render() = 0;
+        virtual ~UIElement() = default;
+    };
+}
+
 
 // Makes the enum class hashable so it can be used as a key in unordered_map
 // Does this by converting it to its underlying type (usually int but could be usigned in, etc)
@@ -26,21 +37,13 @@ enum class UIElementID {
 // This allows UIElementID to be used as a key.
 namespace std{
     template <>
-    struct hash<UIElementID>{
-        std::size_t operator()(const UIElementID& id) const noexcept{
-            return std::hash<std::underlying_type<UIElementID>::type>()(
-                static_cast<std::underlying_type<UIElementID>::type>(id)
+    struct hash<ui::UIElementID>{
+        std::size_t operator()(const ui::UIElementID& id) const noexcept{
+            return std::hash<std::underlying_type<ui::UIElementID>::type>()(
+                static_cast<std::underlying_type<ui::UIElementID>::type>(id)
             );
         }
     };
 }
-
-class UIElement {
-public:
-    bool isVisible = false;
-    virtual void Update(float dt) {};
-    virtual void Render() = 0;
-    virtual ~UIElement() = default;
-};
 
 #endif

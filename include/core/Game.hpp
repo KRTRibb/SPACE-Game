@@ -9,7 +9,7 @@
 #include "ui/UIElements/StaticText.hpp"
 #include "ui/UIElements/FloatingText.hpp"
 #include "ui/UIElements/Border.hpp"
-#include "ui/UIElements/Picture.hpp"
+#include "ui/UIElements/Image.hpp"
 #include <string>
 
 
@@ -46,15 +46,15 @@ private:
     GameState state;
     Winner winner;
 
-    UIManager uiManager;
+    ui::UIManager uiManager;
 
     ResourceManager resources;
     std::unique_ptr<Spaceship> redShip;
     std::unique_ptr<Spaceship> yellowShip;
 
-    std::vector<UIElementID> menuUIElements;
-    std::vector<UIElementID> gameOverUIElements;
-    std::vector<UIElementID> playingUIElements;
+    std::vector<ui::UIElementID> menuUIElements;
+    std::vector<ui::UIElementID> gameOverUIElements;
+    std::vector<ui::UIElementID> playingUIElements;
 
     void SetUpUI();
     void SetMenuUIVisible();

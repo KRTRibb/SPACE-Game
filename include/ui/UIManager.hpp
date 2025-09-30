@@ -7,16 +7,20 @@
 #include <memory>
 #include <vector>
 
-class UIManager {
+namespace ui{
+    class UIManager {
     public:
-        void AddElement(UIElementID uiType, std::unique_ptr<UIElement> element);
-        void RemoveElement(UIElementID id);
-        void Update(float dt);
-        void Render();
-        UIElement* GetElement(UIElementID id);
-        void SetVisibility(const std::vector<UIElementID>& id, bool visible);
-    private:
-        std::unordered_map<UIElementID, std::unique_ptr<UIElement>> elements;
+            void AddElement(UIElementID uiType, std::unique_ptr<UIElement> element);
+            void RemoveElement(UIElementID id);
+            void Update(float dt);
+            void Render();
+            UIElement* GetElement(UIElementID id);
+            void SetVisibility(const std::vector<UIElementID>& id, bool visible);
+        private:
+            std::unordered_map<UIElementID, std::unique_ptr<UIElement>> elements;
+    };
 };
 
 #endif
+
+
