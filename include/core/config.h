@@ -6,4 +6,4 @@
 const int WIDTH = 1000;
 const int HEIGHT = 700; 
 const int MIDDLERECTWIDTH = 10;
-const int FPS = 60;
+const int FPS = 144;

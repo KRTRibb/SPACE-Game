@@ -13,6 +13,7 @@ Game::Game() {
     InitWindow(WIDTH, HEIGHT, "Space Game");
     InitAudioDevice();
     SetTargetFPS(FPS);
+    SetExitKey(KEY_NULL);
 
     state = GameState::Menu;
     winner = Winner::None;
@@ -113,6 +114,12 @@ void Game::Update() {
                 previousState = GameState::Menu;
                 SetStateUIVisibility(state);
             }
+
+            if (IsKeyPressed(KEY_ESCAPE)) {
+                state = GameState::Settings;
+                previousState = GameState::Menu;
+                SetStateUIVisibility(state);
+            }
             break;
         }
         case GameState::Playing: {
@@ -133,8 +140,7 @@ void Game::Update() {
                 SetStateUIVisibility(state);
             }
 
-            auto settingsBtn = dynamic_cast<ui::Button*>(uiManager.GetElement(ui::UIElementID::SettingsButton));
-            if (settingsBtn && settingsBtn->WasClicked()) {
+            if (IsKeyPressed(KEY_ESCAPE)) {
                 state = GameState::Settings;
                 previousState = GameState::Playing;
                 SetStateUIVisibility(state);
@@ -163,6 +169,12 @@ void Game::Update() {
                 previousState = GameState::GameOver;
                 SetStateUIVisibility(state);
             }
+
+            if (IsKeyPressed(KEY_ESCAPE)) {
+                state = GameState::Settings;
+                previousState = GameState::GameOver;
+                SetStateUIVisibility(state);
+            }
             break;
         }
 
@@ -173,6 +185,14 @@ void Game::Update() {
                 previousState = GameState::Settings;
                 SetStateUIVisibility(state);
             }
+
+            if (IsKeyPressed(KEY_ESCAPE)) {
+                state = previousState;
+                previousState = GameState::Settings;
+                SetStateUIVisibility(state);
+            }
+
+            UpdateVolume();
         }
     }
 }
