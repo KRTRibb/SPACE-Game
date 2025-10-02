@@ -127,6 +127,7 @@ void Game::Update() {
             if (storyBtn && storyBtn->WasClicked()) {
                 state = GameState::StoryMode;
                 previousState = GameState::Playing;
+                SetStateUIVisibility(state);
             }
 
             break;
@@ -232,6 +233,10 @@ void Game::Render() {
         case GameState::Settings:
             uiManager.Render();
             break;
+
+        case GameState::StoryMode:
+            uiManager.Render();
+            break;
     }
 
     EndDrawing();
@@ -250,6 +255,7 @@ void Game::SetMenuUIVisible() {
     SetUIVisibility(gameOverUIElements, false);
     SetUIVisibility(playingUIElements, false);
     SetUIVisibility(settingsUIElements, false);
+    SetUIVisibility(storyModeUIElements, false);
     SetUIVisibility(menuUIElements, true);
 }
 
@@ -257,6 +263,7 @@ void Game::SetPlayingUIVisible() {
     SetUIVisibility(gameOverUIElements, false);
     SetUIVisibility(menuUIElements, false);
     SetUIVisibility(settingsUIElements, false);
+    SetUIVisibility(storyModeUIElements, false);
     SetUIVisibility(playingUIElements, true);
 }
 
@@ -264,6 +271,7 @@ void Game::SetGameOverUIVisible() {
     SetUIVisibility(playingUIElements, false);
     SetUIVisibility(menuUIElements, false);
     SetUIVisibility(settingsUIElements, false);
+    SetUIVisibility(storyModeUIElements, false);
     SetUIVisibility(gameOverUIElements, true);
 }
 
@@ -271,7 +279,16 @@ void Game::SetSettingsUIVisible() {
     SetUIVisibility(playingUIElements, false);
     SetUIVisibility(menuUIElements, false);
     SetUIVisibility(gameOverUIElements, false);
+    SetUIVisibility(storyModeUIElements, false);
     SetUIVisibility(settingsUIElements, true);
+}
+
+void Game::SetStoryModeUIVisible() {
+    SetUIVisibility(playingUIElements, false);
+    SetUIVisibility(menuUIElements, false);
+    SetUIVisibility(gameOverUIElements, false);
+    SetUIVisibility(settingsUIElements, false);
+    SetUIVisibility(storyModeUIElements, true);
 }
 
 void Game::SetStateUIVisibility(GameState state){
@@ -287,6 +304,9 @@ void Game::SetStateUIVisibility(GameState state){
             break;
         case GameState::Settings:
             SetSettingsUIVisible();
+            break;
+        case GameState::StoryMode:
+            SetStoryModeUIVisible();
             break;
     }
 }

@@ -69,6 +69,7 @@ private:
     void SetGameOverUIVisible();
     void SetPlayingUIVisible();
     void SetSettingsUIVisible();
+    void SetStoryModeUIVisible();
     void SetStateUIVisibility(GameState state);
 
     void HandleTransitionToSettings();
