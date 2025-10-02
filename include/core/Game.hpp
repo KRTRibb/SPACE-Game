@@ -18,7 +18,8 @@ enum class GameState {
     Menu,
     Playing,
     GameOver,
-    Settings
+    Settings,
+    StoryMode
 };
 
 enum class GameMode {
@@ -58,6 +59,7 @@ private:
     std::vector<ui::UIElementID> gameOverUIElements;
     std::vector<ui::UIElementID> playingUIElements;
     std::vector<ui::UIElementID> settingsUIElements;
+    std::vector<ui::UIElementID> storyModeUIElements;
 
     GameState previousState = GameState::Menu;
 
@@ -68,6 +70,8 @@ private:
     void SetPlayingUIVisible();
     void SetSettingsUIVisible();
     void SetStateUIVisibility(GameState state);
+
+    void HandleTransitionToSettings();
 
     void UpdatePlayingUI();
     void UpdateGameOverUI();

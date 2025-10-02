@@ -7,6 +7,7 @@
 #include "core/config.h"
 #include <string>
 #include <vector>
+#include <iostream>
 
 
 Game::Game() {
@@ -24,7 +25,8 @@ Game::Game() {
         ui::UIElementID::NoPlayerButton,
         ui::UIElementID::TitleText,
         ui::UIElementID::BackgroundImage,
-        ui::UIElementID::SettingsButton
+        ui::UIElementID::SettingsButton,
+        ui::UIElementID::StoryModeButton
     };
 
     gameOverUIElements = {
@@ -48,6 +50,10 @@ Game::Game() {
         ui::UIElementID::BackFromSettingsButton,
         ui::UIElementID::BackgroundImage,
         ui::UIElementID::VolumeSlider
+    };
+
+    storyModeUIElements = {
+        ui::UIElementID::BackgroundImage
     };
 
     resources.loadTexture("redShip", "assets/images/spaceship_red.png");
@@ -110,16 +116,19 @@ void Game::Update() {
 
             auto settingsBtn = dynamic_cast<ui::Button*>(uiManager.GetElement(ui::UIElementID::SettingsButton));
             if (settingsBtn && settingsBtn->WasClicked()) {
-                state = GameState::Settings;
-                previousState = GameState::Menu;
-                SetStateUIVisibility(state);
+                HandleTransitionToSettings();
             }
 
             if (IsKeyPressed(KEY_ESCAPE)) {
-                state = GameState::Settings;
-                previousState = GameState::Menu;
-                SetStateUIVisibility(state);
+                HandleTransitionToSettings();
             }
+
+            auto storyBtn = dynamic_cast<ui::Button*>(uiManager.GetElement(ui::UIElementID::StoryModeButton));
+            if (storyBtn && storyBtn->WasClicked()) {
+                state = GameState::StoryMode;
+                previousState = GameState::Playing;
+            }
+
             break;
         }
         case GameState::Playing: {
@@ -141,9 +150,7 @@ void Game::Update() {
             }
 
             if (IsKeyPressed(KEY_ESCAPE)) {
-                state = GameState::Settings;
-                previousState = GameState::Playing;
-                SetStateUIVisibility(state);
+                HandleTransitionToSettings();
             }
             break;
         }
@@ -165,15 +172,10 @@ void Game::Update() {
 
             auto settingsBtn = dynamic_cast<ui::Button*>(uiManager.GetElement(ui::UIElementID::SettingsButton));
             if (settingsBtn && settingsBtn->WasClicked()) {
-                state = GameState::Settings;
-                previousState = GameState::GameOver;
-                SetStateUIVisibility(state);
+                HandleTransitionToSettings();
             }
-
-            if (IsKeyPressed(KEY_ESCAPE)) {
-                state = GameState::Settings;
-                previousState = GameState::GameOver;
-                SetStateUIVisibility(state);
+            if (IsKeyPressed(KEY_ESCAPE)){
+                HandleTransitionToSettings();
             }
             break;
         }
@@ -193,6 +195,15 @@ void Game::Update() {
             }
 
             UpdateVolume();
+            break;
+        }
+
+        case GameState::StoryMode: {
+            std::cout << "In Story Mode\n";
+            if (IsKeyPressed(KEY_ESCAPE)) {
+                HandleTransitionToSettings();
+            }
+            break;
         }
     }
 }
@@ -287,13 +298,14 @@ void Game::Reset() {
 }
 
 void Game::SetUpUI() {
-    std::unique_ptr<ui::Button> restartButton = std::make_unique<ui::Button> ("Restart Game", WIDTH / 2 - 125, HEIGHT / 2 + 25, 30, GRAY, DARKGRAY, BLACK);
-    std::unique_ptr<ui::Button> backToMenuButton = std::make_unique<ui::Button> ("Back To Menu", WIDTH / 2 + 125, HEIGHT / 2 + 25, 30, GRAY, DARKGRAY, BLACK);
-    std::unique_ptr<ui::Button> singlePlayerButton = std::make_unique<ui::Button> ("Single Player", WIDTH / 2 - 100, HEIGHT / 2, 30, GRAY, DARKGRAY, BLACK);
-    std::unique_ptr<ui::Button> twoPlayerButton = std::make_unique<ui::Button> ("Two Player", WIDTH / 2 + 100, HEIGHT / 2, 30, GRAY, DARKGRAY, BLACK);
-    std::unique_ptr<ui::Button> noPlayerButton = std::make_unique<ui::Button> ("AI vs AI", WIDTH / 2, HEIGHT / 2 + 75, 30, GRAY, DARKGRAY, BLACK);
-    std::unique_ptr<ui::Button> settingsButton = std::make_unique<ui::Button> ("|||", WIDTH - 50, HEIGHT - 60, 30, GRAY, DARKGRAY, BLACK);
-    std::unique_ptr<ui::Button> backFromSettingsButton = std::make_unique<ui::Button> ("Back", WIDTH - 50, 20, 30, GRAY, DARKGRAY, BLACK);
+    std::unique_ptr<ui::Button> restartButton = std::make_unique<ui::Button>("Restart Game", WIDTH / 2 - 125, HEIGHT / 2 + 25, 30, GRAY, DARKGRAY, BLACK);
+    std::unique_ptr<ui::Button> backToMenuButton = std::make_unique<ui::Button>("Back To Menu", WIDTH / 2 + 125, HEIGHT / 2 + 25, 30, GRAY, DARKGRAY, BLACK);
+    std::unique_ptr<ui::Button> singlePlayerButton = std::make_unique<ui::Button>("Single Player", WIDTH / 2 - 100, HEIGHT / 2, 30, GRAY, DARKGRAY, BLACK);
+    std::unique_ptr<ui::Button> twoPlayerButton = std::make_unique<ui::Button>("Two Player", WIDTH / 2 + 100, HEIGHT / 2, 30, GRAY, DARKGRAY, BLACK);
+    std::unique_ptr<ui::Button> noPlayerButton = std::make_unique<ui::Button>("AI vs AI", WIDTH / 2 - 100, HEIGHT / 2 + 75, 30, GRAY, DARKGRAY, BLACK);
+    std::unique_ptr<ui::Button> storyModeButton = std::make_unique<ui::Button>("Story mode", WIDTH / 2 + 100, HEIGHT / 2 + 74, 30, GRAY, DARKGRAY, BLACK);
+    std::unique_ptr<ui::Button> settingsButton = std::make_unique<ui::Button>("|||", WIDTH - 50, HEIGHT - 60, 30, GRAY, DARKGRAY, BLACK);
+    std::unique_ptr<ui::Button> backFromSettingsButton = std::make_unique<ui::Button>("Back", WIDTH - 50, 20, 30, GRAY, DARKGRAY, BLACK);
 
     std::unique_ptr<ui::FloatingText> titleText = std::make_unique<ui::FloatingText>("Space Battle", WIDTH / 2, HEIGHT / 2 - 150, WHITE, 100, 10);
     std::unique_ptr<ui::StaticText> yellowShipHealthText = std::make_unique<ui::StaticText>(TextFormat("Health: %.1f", 100.0f), 80, 25, WHITE, 25);
@@ -315,6 +327,7 @@ void Game::SetUpUI() {
     uiManager.AddElement(ui::UIElementID::NoPlayerButton, std::move(noPlayerButton));
     uiManager.AddElement(ui::UIElementID::SettingsButton, std::move(settingsButton));
     uiManager.AddElement(ui::UIElementID::BackFromSettingsButton, std::move(backFromSettingsButton));
+    uiManager.AddElement(ui::UIElementID::StoryModeButton, std::move(storyModeButton));
 
     uiManager.AddElement(ui::UIElementID::TitleText, std::move(titleText));
     uiManager.AddElement(ui::UIElementID::YellowShipHealthText, std::move(yellowShipHealthText));
@@ -328,6 +341,12 @@ void Game::SetUpUI() {
     uiManager.AddElement(ui::UIElementID::VolumeSlider, std::move(volumeSlider));
 
     uiManager.AddElement(ui::UIElementID::BackgroundImage, std::move(backgroundImage));
+}
+
+void Game::HandleTransitionToSettings() {       
+        previousState = state;
+        state = GameState::Settings;
+        SetStateUIVisibility(state);
 }
 
 void Game::UpdatePlayingUI() {

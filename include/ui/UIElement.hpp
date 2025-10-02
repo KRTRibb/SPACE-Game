@@ -21,7 +21,8 @@ namespace ui{
         BackgroundImage,
         SettingsButton,
         VolumeSlider,
-        BackFromSettingsButton
+        BackFromSettingsButton,
+        StoryModeButton
     };
 
     class UIElement {
